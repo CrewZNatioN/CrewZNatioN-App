@@ -290,10 +290,13 @@ async def delete_vehicle(
     
     return {"message": "Vehicle deleted successfully"}
 
+class VehicleImageAdd(BaseModel):
+    image_base64: str
+
 @api_router.post("/vehicles/{vehicle_id}/images")
 async def add_vehicle_image(
     vehicle_id: str,
-    image_base64: str,
+    image_data: VehicleImageAdd,
     current_user_id: str = Depends(get_current_user)
 ):
     # Check ownership
@@ -304,7 +307,7 @@ async def add_vehicle_image(
     # Add image to vehicle
     await db.vehicles.update_one(
         {"id": vehicle_id},
-        {"$push": {"images": image_base64}}
+        {"$push": {"images": image_data.image_base64}}
     )
     
     return {"message": "Image added successfully"}
