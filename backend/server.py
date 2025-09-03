@@ -359,6 +359,7 @@ async def get_feed(
         },
         {
             "$project": {
+                "_id": 0,  # Exclude MongoDB _id
                 "id": 1,
                 "user_id": 1,
                 "vehicle_id": 1,
@@ -367,8 +368,36 @@ async def get_feed(
                 "likes_count": 1,
                 "comments_count": 1,
                 "created_at": 1,
-                "user": {"$arrayElemAt": ["$user", 0]},
-                "vehicle": {"$arrayElemAt": ["$vehicle", 0]}
+                "user": {
+                    "$let": {
+                        "vars": {"user": {"$arrayElemAt": ["$user", 0]}},
+                        "in": {
+                            "id": "$$user.id",
+                            "username": "$$user.username",
+                            "full_name": "$$user.full_name",
+                            "profile_image": "$$user.profile_image"
+                        }
+                    }
+                },
+                "vehicle": {
+                    "$let": {
+                        "vars": {"vehicle": {"$arrayElemAt": ["$vehicle", 0]}},
+                        "in": {
+                            "$cond": {
+                                "if": {"$ne": ["$$vehicle", None]},
+                                "then": {
+                                    "id": "$$vehicle.id",
+                                    "make": "$$vehicle.make",
+                                    "model": "$$vehicle.model",
+                                    "year": "$$vehicle.year",
+                                    "type": "$$vehicle.type",
+                                    "color": "$$vehicle.color"
+                                },
+                                "else": None
+                            }
+                        }
+                    }
+                }
             }
         }
     ]
