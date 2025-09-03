@@ -1,0 +1,56 @@
+{
+  "expo": {
+    "name": "CrewZNatioN",
+    "slug": "crewznation",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/crewz-logo.png",
+    "scheme": "crewznation",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "description": "The ultimate automotive social media platform for car and motorcycle enthusiasts",
+    "primaryColor": "#FF6B35",
+    "backgroundColor": "#000000",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.crewznation.app",
+      "buildNumber": "1",
+      "icon": "./assets/images/crewz-logo.png"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/crewz-logo.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.crewznation.app",
+      "versionCode": 1,
+      "icon": "./assets/images/crewz-logo.png",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#000"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
