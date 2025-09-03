@@ -11,6 +11,7 @@ from typing import List, Optional
 import uuid
 from datetime import datetime, timedelta
 import jwt
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
 import bcrypt
 import base64
 from bson import ObjectId
