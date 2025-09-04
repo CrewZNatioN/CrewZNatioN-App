@@ -498,6 +498,300 @@ async def toggle_like(
         await db.posts.update_one({"id": post_id}, {"$inc": {"likes_count": 1}})
         return {"message": "Post liked", "liked": True}
 
+# ===== EVENTS ROUTES =====
+@api_router.post("/events", response_model=Event)
+async def create_event(
+    event_data: EventCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    event = Event(**event_data.dict(), user_id=current_user_id)
+    await db.events.insert_one(event.dict())
+    return event
+
+@api_router.get("/events", response_model=List[dict])
+async def get_events(
+    limit: int = 20,
+    skip: int = 0,
+    current_user_id: str = Depends(get_current_user)
+):
+    # Get events with user info
+    pipeline = [
+        {"$sort": {"event_date": 1}},  # Upcoming events first
+        {"$skip": skip},
+        {"$limit": limit},
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "id",
+                "as": "user"
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "id": 1,
+                "user_id": 1,
+                "title": 1,
+                "description": 1,
+                "location": 1,
+                "latitude": 1,
+                "longitude": 1,
+                "event_date": 1,
+                "max_attendees": 1,
+                "attendees_count": 1,
+                "image": 1,
+                "created_at": 1,
+                "user": {
+                    "$let": {
+                        "vars": {"user": {"$arrayElemAt": ["$user", 0]}},
+                        "in": {
+                            "id": "$$user.id",
+                            "username": "$$user.username",
+                            "full_name": "$$user.full_name",
+                            "profile_image": "$$user.profile_image"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+    
+    events = await db.events.aggregate(pipeline).to_list(limit)
+    return events
+
+@api_router.get("/events/{event_id}", response_model=dict)
+async def get_event(event_id: str):
+    pipeline = [
+        {"$match": {"id": event_id}},
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "id",
+                "as": "user"
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "id": 1,
+                "user_id": 1,
+                "title": 1,
+                "description": 1,
+                "location": 1,
+                "latitude": 1,
+                "longitude": 1,
+                "event_date": 1,
+                "max_attendees": 1,
+                "attendees_count": 1,
+                "image": 1,
+                "created_at": 1,
+                "user": {
+                    "$let": {
+                        "vars": {"user": {"$arrayElemAt": ["$user", 0]}},
+                        "in": {
+                            "id": "$$user.id",
+                            "username": "$$user.username",
+                            "full_name": "$$user.full_name",
+                            "profile_image": "$$user.profile_image"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+    
+    events = await db.events.aggregate(pipeline).to_list(1)
+    if not events:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    return events[0]
+
+@api_router.post("/events/{event_id}/attend")
+async def toggle_attendance(
+    event_id: str,
+    current_user_id: str = Depends(get_current_user)
+):
+    # Check if already attending
+    existing_attendance = await db.event_attendance.find_one({"event_id": event_id, "user_id": current_user_id})
+    
+    if existing_attendance:
+        # Remove attendance
+        await db.event_attendance.delete_one({"event_id": event_id, "user_id": current_user_id})
+        await db.events.update_one({"id": event_id}, {"$inc": {"attendees_count": -1}})
+        return {"message": "Attendance removed", "attending": False}
+    else:
+        # Add attendance
+        attendance = EventAttendance(event_id=event_id, user_id=current_user_id)
+        await db.event_attendance.insert_one(attendance.dict())
+        await db.events.update_one({"id": event_id}, {"$inc": {"attendees_count": 1}})
+        return {"message": "Marked as attending", "attending": True}
+
+# ===== FORUMS ROUTES =====
+@api_router.get("/forums/categories", response_model=List[ForumCategory])
+async def get_forum_categories():
+    categories = await db.forum_categories.find().to_list(100)
+    return [ForumCategory(**cat) for cat in categories]
+
+@api_router.post("/forums/categories", response_model=ForumCategory)
+async def create_forum_category(
+    name: str,
+    description: str,
+    color: str = "#FF6B35",
+    current_user_id: str = Depends(get_current_user)
+):
+    category = ForumCategory(name=name, description=description, color=color)
+    await db.forum_categories.insert_one(category.dict())
+    return category
+
+@api_router.get("/forums/categories/{category_id}/threads", response_model=List[dict])
+async def get_category_threads(
+    category_id: str,
+    limit: int = 20,
+    skip: int = 0
+):
+    pipeline = [
+        {"$match": {"category_id": category_id}},
+        {"$sort": {"is_pinned": -1, "last_reply_at": -1, "created_at": -1}},
+        {"$skip": skip},
+        {"$limit": limit},
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "id",
+                "as": "user"
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "id": 1,
+                "category_id": 1,
+                "user_id": 1,
+                "title": 1,
+                "content": 1,
+                "is_pinned": 1,
+                "is_locked": 1,
+                "replies_count": 1,
+                "views_count": 1,
+                "last_reply_at": 1,
+                "created_at": 1,
+                "user": {
+                    "$let": {
+                        "vars": {"user": {"$arrayElemAt": ["$user", 0]}},
+                        "in": {
+                            "id": "$$user.id",
+                            "username": "$$user.username",
+                            "full_name": "$$user.full_name",
+                            "profile_image": "$$user.profile_image"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+    
+    threads = await db.forum_threads.aggregate(pipeline).to_list(limit)
+    return threads
+
+@api_router.post("/forums/categories/{category_id}/threads", response_model=ForumThread)
+async def create_forum_thread(
+    category_id: str,
+    thread_data: ForumThreadCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    thread = ForumThread(
+        category_id=category_id,
+        user_id=current_user_id,
+        title=thread_data.title,
+        content=thread_data.content,
+        last_reply_at=datetime.utcnow()
+    )
+    await db.forum_threads.insert_one(thread.dict())
+    
+    # Update category thread count
+    await db.forum_categories.update_one(
+        {"id": category_id},
+        {"$inc": {"threads_count": 1}}
+    )
+    
+    return thread
+
+@api_router.get("/forums/threads/{thread_id}/replies", response_model=List[dict])
+async def get_thread_replies(
+    thread_id: str,
+    limit: int = 50,
+    skip: int = 0
+):
+    # Increment view count
+    await db.forum_threads.update_one({"id": thread_id}, {"$inc": {"views_count": 1}})
+    
+    pipeline = [
+        {"$match": {"thread_id": thread_id}},
+        {"$sort": {"created_at": 1}},
+        {"$skip": skip},
+        {"$limit": limit},
+        {
+            "$lookup": {
+                "from": "users",
+                "localField": "user_id",
+                "foreignField": "id",
+                "as": "user"
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "id": 1,
+                "thread_id": 1,
+                "user_id": 1,
+                "content": 1,
+                "is_moderator": 1,
+                "created_at": 1,
+                "user": {
+                    "$let": {
+                        "vars": {"user": {"$arrayElemAt": ["$user", 0]}},
+                        "in": {
+                            "id": "$$user.id",
+                            "username": "$$user.username",
+                            "full_name": "$$user.full_name",
+                            "profile_image": "$$user.profile_image"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+    
+    replies = await db.forum_replies.aggregate(pipeline).to_list(limit)
+    return replies
+
+@api_router.post("/forums/threads/{thread_id}/replies", response_model=ForumReply)
+async def create_forum_reply(
+    thread_id: str,
+    reply_data: ForumReplyCreate,
+    current_user_id: str = Depends(get_current_user)
+):
+    reply = ForumReply(
+        thread_id=thread_id,
+        user_id=current_user_id,
+        content=reply_data.content
+    )
+    await db.forum_replies.insert_one(reply.dict())
+    
+    # Update thread reply count and last reply time
+    await db.forum_threads.update_one(
+        {"id": thread_id},
+        {
+            "$inc": {"replies_count": 1},
+            "$set": {"last_reply_at": datetime.utcnow()}
+        }
+    )
+    
+    return reply
+
 # Include router
 app.include_router(api_router)
 
