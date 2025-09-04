@@ -91,7 +91,7 @@ export default function ProfileScreen() {
           <Text style={styles.emptyStateText}>No vehicles added yet</Text>
           <TouchableOpacity 
             style={styles.addButton}
-            onPress={() => router.push('/add-vehicle')}
+            onPress={() => Alert.alert('Add Vehicle', 'Vehicle management coming soon!')}
           >
             <Text style={styles.addButtonText}>Add Your First Ride</Text>
           </TouchableOpacity>
@@ -124,7 +124,7 @@ export default function ProfileScreen() {
           ))}
           <TouchableOpacity 
             style={styles.addVehicleCard}
-            onPress={() => router.push('/add-vehicle')}
+            onPress={() => Alert.alert('Add Vehicle', 'Vehicle management coming soon!')}
           >
             <Ionicons name="add" size={32} color="#FF6B35" />
             <Text style={styles.addVehicleText}>Add Vehicle</Text>
