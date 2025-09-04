@@ -42,20 +42,29 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="add-post"
+        name="events"
         options={{
-          title: 'Add',
+          title: 'Events',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="add-circle" size={size} color={color} />
+            <Ionicons name="calendar" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="notifications"
+        name="forums"
         options={{
-          title: 'Activity',
+          title: 'Forums',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="heart" size={size} color={color} />
+            <Ionicons name="chatbubbles" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="garage"
+        options={{
+          title: 'Garage',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="car" size={size} color={color} />
           ),
         }}
       />
