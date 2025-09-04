@@ -632,6 +632,22 @@ async def toggle_attendance(
 @api_router.get("/forums/categories", response_model=List[ForumCategory])
 async def get_forum_categories():
     categories = await db.forum_categories.find().to_list(100)
+    
+    # Create default categories if none exist
+    if len(categories) == 0:
+        default_categories = [
+            ForumCategory(name="General Discussion", description="General automotive discussion", color="#FF6B35"),
+            ForumCategory(name="Car Builds", description="Share your build projects", color="#1E90FF"),
+            ForumCategory(name="Technical Help", description="Get help with repairs and modifications", color="#10B981"),
+            ForumCategory(name="Events & Meets", description="Organize and discuss automotive events", color="#F59E0B"),
+            ForumCategory(name="Buy & Sell", description="Marketplace for parts and vehicles", color="#8B5CF6")
+        ]
+        
+        for cat in default_categories:
+            await db.forum_categories.insert_one(cat.dict())
+        
+        categories = await db.forum_categories.find().to_list(100)
+    
     return [ForumCategory(**cat) for cat in categories]
 
 @api_router.post("/forums/categories", response_model=ForumCategory)
