@@ -238,7 +238,6 @@ export default function HomeScreen() {
           data={posts}
           renderItem={renderPost}
           keyExtractor={(item) => item.id}
-          estimatedItemSize={400}
           refreshControl={
             <RefreshControl
               refreshing={refreshing}
