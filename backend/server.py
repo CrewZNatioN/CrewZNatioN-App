@@ -110,6 +110,73 @@ class Like(BaseModel):
     user_id: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class Event(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    title: str
+    description: str
+    location: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    event_date: datetime
+    max_attendees: Optional[int] = None
+    attendees_count: int = 0
+    image: Optional[str] = ""  # base64
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class EventCreate(BaseModel):
+    title: str
+    description: str
+    location: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    event_date: datetime
+    max_attendees: Optional[int] = None
+
+class ForumCategory(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    name: str
+    description: str
+    color: str = "#FF6B35"
+    threads_count: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ForumThread(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    category_id: str
+    user_id: str
+    title: str
+    content: str
+    is_pinned: bool = False
+    is_locked: bool = False
+    replies_count: int = 0
+    views_count: int = 0
+    last_reply_at: Optional[datetime] = None
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ForumThreadCreate(BaseModel):
+    category_id: str
+    title: str
+    content: str
+
+class ForumReply(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    thread_id: str
+    user_id: str
+    content: str
+    is_moderator: bool = False
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class ForumReplyCreate(BaseModel):
+    content: str
+
+class EventAttendance(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    event_id: str
+    user_id: str
+    status: str = "attending"  # attending, maybe, not_attending
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
 class AuthResponse(BaseModel):
     access_token: str
     token_type: str
