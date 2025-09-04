@@ -102,7 +102,7 @@ export default function ProfileScreen() {
             <TouchableOpacity 
               key={vehicle.id} 
               style={styles.vehicleCard}
-              onPress={() => router.push(`/vehicle-details?id=${vehicle.id}`)}
+              onPress={() => Alert.alert('Vehicle Details', 'Vehicle details coming soon!')}
             >
               {vehicle.images.length > 0 ? (
                 <Image
