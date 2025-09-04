@@ -125,7 +125,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: Colors.background,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#FF6B35',
+    color: Colors.primary,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#888',
+    color: Colors.textSecondary,
   },
   form: {
     width: '100%',
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#111',
+    backgroundColor: Colors.surface,
     borderRadius: 12,
     marginBottom: 16,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: '#333',
+    borderColor: Colors.border,
   },
   inputIcon: {
     marginRight: 12,
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     fontSize: 16,
-    color: '#fff',
+    color: Colors.text,
   },
   passwordInput: {
     paddingRight: 40,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     padding: 4,
   },
   loginButton: {
-    backgroundColor: '#FF6B35',
+    backgroundColor: Colors.primary,
     borderRadius: 12,
     height: 50,
     justifyContent: 'center',
@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   loginButtonText: {
-    color: '#fff',
+    color: Colors.text,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -200,10 +200,10 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#333',
+    backgroundColor: Colors.border,
   },
   dividerText: {
-    color: '#888',
+    color: Colors.textSecondary,
     marginHorizontal: 16,
     fontSize: 14,
   },
@@ -212,10 +212,10 @@ const styles = StyleSheet.create({
   },
   registerLinkText: {
     fontSize: 14,
-    color: '#888',
+    color: Colors.textSecondary,
   },
   registerLinkHighlight: {
-    color: '#FF6B35',
+    color: Colors.primary,
     fontWeight: '600',
   },
 });
