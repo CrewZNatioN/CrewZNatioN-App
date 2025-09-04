@@ -49,6 +49,8 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
+  // TEST MESSAGE TO VERIFY UPDATES ARE WORKING
+  console.log("🔥 NEW VERSION LOADED - EVENTS AND FORUMS SHOULD BE VISIBLE!");
   useEffect(() => {
     loadFeed();
   }, []);
