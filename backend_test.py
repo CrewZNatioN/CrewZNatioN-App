@@ -13,7 +13,7 @@ import sys
 import os
 
 # Get backend URL from environment
-BACKEND_URL = "https://ridesocial.preview.emergentagent.com/api"
+BACKEND_URL = "https://car-social.preview.emergentagent.com/api"
 
 class CrewZNationAPITester:
     def __init__(self):

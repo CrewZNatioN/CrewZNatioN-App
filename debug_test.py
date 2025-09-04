@@ -7,7 +7,7 @@ import requests
 import json
 from datetime import datetime
 
-BACKEND_URL = "https://ridesocial.preview.emergentagent.com/api"
+BACKEND_URL = "https://car-social.preview.emergentagent.com/api"
 
 def debug_auth_issues():
     print("🔍 Debugging authentication issues...")
