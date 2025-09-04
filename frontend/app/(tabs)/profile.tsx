@@ -142,7 +142,7 @@ export default function ProfileScreen() {
           <Text style={styles.emptyStateText}>No posts yet</Text>
           <TouchableOpacity 
             style={styles.addButton}
-            onPress={() => router.push('/(tabs)/add-post')}
+            onPress={() => Alert.alert('Create Post', 'Post creation coming soon!')}
           >
             <Text style={styles.addButtonText}>Create Your First Post</Text>
           </TouchableOpacity>
