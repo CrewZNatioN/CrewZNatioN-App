@@ -764,6 +764,14 @@ const styles = StyleSheet.create({
   statItem: {
     alignItems: 'center',
   },
+  userSection: {
+    alignItems: 'center',
+  },
+  usernameText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
   statNumber: {
     fontSize: 24,
     fontWeight: 'bold',
