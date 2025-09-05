@@ -19,6 +19,7 @@ const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 interface Post {
   _id: string;
+  user_id: string;
   user: {
     username: string;
     profilePicture?: string;
@@ -36,6 +37,7 @@ interface Post {
 }
 
 export default function FeedScreen() {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
