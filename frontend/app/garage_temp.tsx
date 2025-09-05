@@ -723,6 +723,110 @@ export default function GarageScreen() {
           </View>
         </View>
       </Modal>
+
+      {/* Media Viewer Modal - FULL SCREEN PHOTO/VIDEO GALLERY */}
+      <Modal
+        visible={showMediaViewer}
+        animationType="fade"
+        transparent={false}
+        onRequestClose={() => setShowMediaViewer(false)}
+      >
+        <View style={styles.mediaViewerContainer}>
+          <View style={styles.mediaViewerHeader}>
+            <TouchableOpacity 
+              onPress={() => setShowMediaViewer(false)}
+              style={styles.mediaCloseButton}
+            >
+              <Ionicons name="close" size={28} color="#FFFFFF" />
+            </TouchableOpacity>
+            
+            <View style={styles.mediaInfo}>
+              <Text style={styles.mediaVehicleTitle}>
+                {selectedGarageVehicle ? 
+                  `${selectedGarageVehicle.make} ${selectedGarageVehicle.model} (${selectedGarageVehicle.year})` 
+                  : 'Vehicle'}
+              </Text>
+              <Text style={styles.mediaCounter}>
+                {selectedGarageVehicle?.media ? 
+                  `${selectedMediaIndex + 1} of ${selectedGarageVehicle.media.length}` 
+                  : ''}
+              </Text>
+            </View>
+
+            <TouchableOpacity 
+              onPress={() => {
+                if (selectedGarageVehicle?.media && selectedGarageVehicle.media[selectedMediaIndex]) {
+                  Alert.alert(
+                    'Delete Photo',
+                    'Are you sure you want to delete this photo?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      { 
+                        text: 'Delete', 
+                        style: 'destructive',
+                        onPress: () => deleteVehiclePhoto(
+                          selectedGarageVehicle.id, 
+                          selectedGarageVehicle.media[selectedMediaIndex].id
+                        )
+                      }
+                    ]
+                  );
+                }
+              }}
+              style={styles.mediaDeleteButton}
+            >
+              <Ionicons name="trash" size={24} color="#FF4444" />
+            </TouchableOpacity>
+          </View>
+
+          {selectedGarageVehicle?.media && selectedGarageVehicle.media.length > 0 && (
+            <ScrollView 
+              horizontal 
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              onMomentumScrollEnd={(event) => {
+                const index = Math.round(event.nativeEvent.contentOffset.x / width);
+                setSelectedMediaIndex(index);
+              }}
+              contentOffset={{ x: selectedMediaIndex * width, y: 0 }}
+            >
+              {selectedGarageVehicle.media.map((media, index) => (
+                <View key={media.id} style={styles.mediaSlide}>
+                  <Image 
+                    source={{ uri: `data:image/jpeg;base64,${media.image}` }}
+                    style={styles.fullscreenImage}
+                    resizeMode="contain"
+                  />
+                  {media.caption && (
+                    <View style={styles.fullscreenCaption}>
+                      <Text style={styles.fullscreenCaptionText}>
+                        {media.caption}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))}
+            </ScrollView>
+          )}
+
+          {/* Add more photos button */}
+          <TouchableOpacity 
+            style={styles.addMorePhotosButton}
+            onPress={() => {
+              setShowMediaViewer(false);
+              setTimeout(() => openPhotoModal(selectedGarageVehicle!), 100);
+            }}
+          >
+            <LinearGradient
+              colors={['#FFD700', '#F59E0B']}
+              style={styles.addMorePhotosGradient}
+            >
+              <Ionicons name="camera" size={20} color="#000000" />
+              <Text style={styles.addMorePhotosText}>Add More Photos</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
