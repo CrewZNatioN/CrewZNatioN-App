@@ -212,7 +212,57 @@ export default function GarageScreen() {
       </LinearGradient>
     </TouchableOpacity>
   );
-
+  const renderGarageVehicle = ({ item }: { item: UserGarageVehicle }) => (
+    <TouchableOpacity style={styles.garageVehicleCard}>
+      <LinearGradient
+        colors={['#1A1A1A', '#2D2D2D']}
+        style={styles.garageVehicleGradient}
+      >
+        {/* Vehicle Image with Garage Lighting Effect */}
+        <View style={styles.vehicleImageContainer}>
+          {item.image ? (
+            <Image 
+              source={{ uri: `data:image/jpeg;base64,${item.image}` }}
+              style={styles.garageVehicleImage}
+            />
+          ) : (
+            <View style={styles.placeholderVehicle}>
+              <Ionicons name="car-sport" size={40} color="#FFD700" />
+            </View>
+          )}
+          <LinearGradient
+            colors={['transparent', 'rgba(0,0,0,0.8)']}
+            style={styles.vehicleImageOverlay}
+          />
+        </View>
+        
+        {/* Vehicle Info with Garage Theme */}
+        <View style={styles.garageVehicleInfo}>
+          <Text style={styles.garageVehicleMake}>{item.make}</Text>
+          <Text style={styles.garageVehicleModel}>{item.model}</Text>
+          <Text style={styles.garageVehicleYear}>{item.year}</Text>
+          
+          {/* Performance Badge */}
+          {item.horsepower && (
+            <View style={styles.performanceBadge}>
+              <Ionicons name="flash" size={12} color="#000000" />
+              <Text style={styles.performanceText}>{item.horsepower}HP</Text>
+            </View>
+          )}
+        </View>
+        
+        {/* Garage Actions */}
+        <View style={styles.garageActions}>
+          <TouchableOpacity 
+            style={styles.garageActionButton}
+            onPress={() => removeVehicleFromGarage(item.id)}
+          >
+            <Ionicons name="build" size={16} color="#FFD700" />
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    </TouchableOpacity>
+  );
   const renderAvailableVehicle = ({ item }: { item: Vehicle }) => (
     <TouchableOpacity 
       style={styles.availableVehicleCard}
