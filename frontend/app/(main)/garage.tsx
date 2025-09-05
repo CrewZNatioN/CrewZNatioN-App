@@ -332,16 +332,9 @@ export default function GarageScreen() {
           </TouchableOpacity>
         </View>
         
-        {/* User Info & Vehicle Count */}
-        <View style={styles.garageStats}>
-          <View style={styles.userSection}>
-            <Text style={styles.usernameText}>{username ? `@${username}` : "@username"}</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>{userVehicles.length}</Text>
-            <Text style={styles.statLabel}>VEHICLES</Text>
-          </View>
+        {/* Username centered under garage title */}
+        <View style={styles.usernameSection}>
+          <Text style={styles.usernameText}>{username ? `@${username}` : "@username"}</Text>
         </View>
       </LinearGradient>
 
@@ -781,6 +774,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+  },
+  usernameSection: {
+    alignItems: 'center',
+    marginTop: 8,
   },
   statItem: {
     alignItems: 'center',
