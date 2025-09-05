@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     alignItems: 'center',
     marginTop: 8,
-    marginBottom: 32,
+    marginBottom: 20,
   },
   signInButtonText: {
     fontSize: 18,
