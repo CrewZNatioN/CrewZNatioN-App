@@ -934,6 +934,35 @@ async def search_users(q: str, current_user: dict = Depends(get_current_user)):
     
     return result
 
+@api_router.put("/garage/{vehicle_id}/photo")
+async def update_vehicle_photo(vehicle_id: str, photo_data: dict, current_user: dict = Depends(get_current_user)):
+    try:
+        # Check if vehicle exists in user's garage
+        garage_vehicle = await db.garage.find_one({
+            "user_id": current_user["id"],
+            "vehicle_id": vehicle_id
+        })
+        
+        if not garage_vehicle:
+            raise HTTPException(status_code=404, detail="Vehicle not found in garage")
+        
+        # Update the vehicle with photo
+        await db.garage.update_one(
+            {"user_id": current_user["id"], "vehicle_id": vehicle_id},
+            {
+                "$set": {
+                    "image": photo_data.get("image"),
+                    "media_type": photo_data.get("media_type", "image"),
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        return {"message": "Vehicle photo updated successfully"}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 # Include the router in the main app
 app.include_router(api_router)
 
