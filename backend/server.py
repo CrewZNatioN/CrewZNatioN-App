@@ -946,20 +946,63 @@ async def update_vehicle_photo(vehicle_id: str, photo_data: dict, current_user: 
         if not garage_vehicle:
             raise HTTPException(status_code=404, detail="Vehicle not found in garage")
         
-        # Update the vehicle with photo
+        # Create new media item
+        new_media = {
+            "id": str(uuid.uuid4()),
+            "image": photo_data.get("image"),
+            "media_type": photo_data.get("media_type", "image"),
+            "caption": photo_data.get("caption", ""),
+            "created_at": datetime.utcnow()
+        }
+        
+        # Add to existing media array or create new one
+        current_media = garage_vehicle.get("media", [])
+        current_media.append(new_media)
+        
+        # Update the vehicle with new media
         await db.garage.update_one(
             {"user_id": current_user["id"], "vehicle_id": vehicle_id},
             {
                 "$set": {
-                    "image": photo_data.get("image"),
-                    "media_type": photo_data.get("media_type", "image"),
-                    "caption": photo_data.get("caption", ""),
+                    "media": current_media,
                     "updated_at": datetime.utcnow()
                 }
             }
         )
         
-        return {"message": "Vehicle photo updated successfully"}
+        return {"message": "Vehicle photo added successfully", "media_id": new_media["id"]}
+    
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.delete("/garage/{vehicle_id}/photo/{media_id}")
+async def delete_vehicle_photo(vehicle_id: str, media_id: str, current_user: dict = Depends(get_current_user)):
+    try:
+        # Check if vehicle exists in user's garage
+        garage_vehicle = await db.garage.find_one({
+            "user_id": current_user["id"],
+            "vehicle_id": vehicle_id
+        })
+        
+        if not garage_vehicle:
+            raise HTTPException(status_code=404, detail="Vehicle not found in garage")
+        
+        # Remove specific media item
+        current_media = garage_vehicle.get("media", [])
+        updated_media = [media for media in current_media if media.get("id") != media_id]
+        
+        # Update the vehicle
+        await db.garage.update_one(
+            {"user_id": current_user["id"], "vehicle_id": vehicle_id},
+            {
+                "$set": {
+                    "media": updated_media,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        return {"message": "Vehicle photo deleted successfully"}
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
