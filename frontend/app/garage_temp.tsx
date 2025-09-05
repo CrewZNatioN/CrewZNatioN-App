@@ -1237,4 +1237,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
   },
+  // Caption input styles
+  captionContainer: {
+    marginBottom: 20,
+  },
+  captionInput: {
+    backgroundColor: '#2D2D2D',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 16,
+    color: '#FFFFFF',
+    maxHeight: 80,
+    textAlignVertical: 'top',
+    borderWidth: 1,
+    borderColor: '#444444',
+  },
+  captionCounter: {
+    fontSize: 12,
+    color: '#999999',
+    textAlign: 'right',
+    marginTop: 4,
+  },
 });
