@@ -394,62 +394,106 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  logoSymbolsContainer: {
+  mainLogoRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 12,
   },
-  leftLogoSymbol: {
-    marginRight: 16,
+  leftSymbol: {
+    marginRight: 20,
   },
-  symbolCircle: {
-    width: 48,
-    height: 48,
-    position: 'relative',
-    alignItems: 'center',
-    justifyContent: 'center',
+  rightSymbol: {
+    marginLeft: 20,
   },
-  symbolInnerCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    borderWidth: 3,
+  outerCircle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 2,
     borderColor: '#FFFFFF',
-    backgroundColor: 'transparent',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   },
-  symbolTriangle: {
+  innerElements: {
+    position: 'relative',
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  centerDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#FFFFFF',
+  },
+  triangularElements: {
     position: 'absolute',
-    right: 8,
-    bottom: 8,
+    width: '100%',
+    height: '100%',
+  },
+  triangle1: {
+    position: 'absolute',
+    top: 2,
+    right: 2,
     width: 0,
     height: 0,
-    borderLeftWidth: 8,
+    borderLeftWidth: 6,
     borderRightWidth: 0,
-    borderBottomWidth: 8,
+    borderBottomWidth: 6,
     borderStyle: 'solid',
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     borderBottomColor: '#FFD700',
   },
-  crewzTextContainer: {
-    alignItems: 'center',
+  triangle2: {
+    position: 'absolute',
+    bottom: 2,
+    left: 2,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 0,
+    borderRightWidth: 6,
+    borderTopWidth: 6,
+    borderStyle: 'solid',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFD700',
   },
-  crewzText: {
-    fontSize: 36,
+  triangle3: {
+    position: 'absolute',
+    bottom: 2,
+    right: 2,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 6,
+    borderRightWidth: 0,
+    borderTopWidth: 6,
+    borderStyle: 'solid',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#FFD700',
+  },
+  crewzContainer: {
+    paddingHorizontal: 16,
+  },
+  crewzMainText: {
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    letterSpacing: 4,
+    letterSpacing: 3,
   },
-  nationContainer: {
+  nationRow: {
     alignItems: 'center',
   },
-  nationText: {
-    fontSize: 36,
+  nationMainText: {
+    fontSize: 34,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    letterSpacing: 4,
+    letterSpacing: 3,
   },
-  nationOText: {
+  nationHighlight: {
     color: '#FFD700',
   },
   welcomeText: {
