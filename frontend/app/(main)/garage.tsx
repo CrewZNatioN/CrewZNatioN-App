@@ -742,7 +742,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1E3A8A',
   },
-$(cat /tmp/new_styles.txt)
   // New Garage Theme Styles
   garageHeader: {
     paddingHorizontal: 20,
