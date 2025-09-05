@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   RefreshControl,
   Dimensions,
+  ScrollView,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -36,11 +38,39 @@ interface Post {
   };
 }
 
+interface Story {
+  id: string;
+  user_id: string;
+  user: {
+    username: string;
+    profilePicture?: string;
+  };
+  media: string;
+  media_type: string;
+  created_at: string;
+  expires_at: string;
+  views: string[];
+}
+
+interface StoryGroup {
+  user_id: string;
+  user: {
+    username: string;
+    profilePicture?: string;
+  };
+  stories: Story[];
+  hasUnviewed: boolean;
+}
+
 export default function FeedScreen() {
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [storyGroups, setStoryGroups] = useState<StoryGroup[]>([]);
+  const [showStoryViewer, setShowStoryViewer] = useState(false);
+  const [selectedStoryGroup, setSelectedStoryGroup] = useState<StoryGroup | null>(null);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
   const fetchPosts = async () => {
     try {
@@ -209,6 +239,56 @@ export default function FeedScreen() {
         >
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
         </TouchableOpacity>
+      </View>
+
+      {/* Stories Section */}
+      <View style={styles.storiesContainer}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.storiesScrollContent}
+        >
+          {/* Your Story */}
+          <TouchableOpacity 
+            style={styles.storyItem}
+            onPress={() => router.push('/(main)/camera')}
+          >
+            <View style={styles.yourStoryContainer}>
+              <View style={styles.yourStoryCircle}>
+                <Ionicons name="add" size={24} color="#FFFFFF" />
+              </View>
+              <Text style={styles.storyUsername}>Your Story</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Sample Stories - These would come from API */}
+          {[
+            { username: 'speedlover', hasUnviewed: true },
+            { username: 'bikerfan', hasUnviewed: false },
+            { username: 'crewzmember', hasUnviewed: true },
+            { username: 'trackday', hasUnviewed: false },
+            { username: 'motorhead', hasUnviewed: true },
+          ].map((story, index) => (
+            <TouchableOpacity 
+              key={index}
+              style={styles.storyItem}
+              onPress={() => {
+                // This would open story viewer with real data
+                Alert.alert('Story Viewer', `View ${story.username}'s story`);
+              }}
+            >
+              <View style={[
+                styles.storyCircle,
+                story.hasUnviewed ? styles.unviewedStory : styles.viewedStory
+              ]}>
+                <View style={styles.storyAvatar}>
+                  <Ionicons name="person" size={20} color="#666666" />
+                </View>
+              </View>
+              <Text style={styles.storyUsername}>{story.username}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </View>
 
       <FlatList
@@ -412,5 +492,64 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#FFD700',
     fontWeight: '600',
+  },
+  // Stories styles
+  storiesContainer: {
+    backgroundColor: '#1A1A1A',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+  },
+  storiesScrollContent: {
+    paddingHorizontal: 16,
+  },
+  storyItem: {
+    alignItems: 'center',
+    marginRight: 16,
+    width: 70,
+  },
+  yourStoryContainer: {
+    alignItems: 'center',
+  },
+  yourStoryCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#333333',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    marginBottom: 8,
+  },
+  storyCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  unviewedStory: {
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  viewedStory: {
+    borderWidth: 2,
+    borderColor: '#666666',
+  },
+  storyAvatar: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: '#333333',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  storyUsername: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    maxWidth: 70,
   },
 });
