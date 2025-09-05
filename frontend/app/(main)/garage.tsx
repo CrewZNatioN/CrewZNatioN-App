@@ -107,6 +107,7 @@ export default function GarageScreen() {
 
   const onRefresh = () => {
     setRefreshing(true);
+    fetchUserData();
     fetchUserGarage();
     fetchAllVehicles();
   };
