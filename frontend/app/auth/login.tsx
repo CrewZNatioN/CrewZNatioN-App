@@ -342,31 +342,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#FFD700',
-    marginBottom: 8,
-  },
-  toggleContainer: {
-    flexDirection: 'row',
     marginBottom: 32,
-    backgroundColor: '#1F2937',
-    borderRadius: 12,
-    padding: 4,
-  },
-  toggleButton: {
-    flex: 1,
-    paddingVertical: 14,
-    alignItems: 'center',
-    borderRadius: 8,
-  },
-  activeToggle: {
-    backgroundColor: '#FFD700',
-  },
-  toggleText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#9CA3AF',
-  },
-  activeToggleText: {
-    color: '#000000',
   },
   formContainer: {
     flex: 1,
