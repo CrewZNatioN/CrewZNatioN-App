@@ -330,4 +330,14 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#666666',
   },
+  postHeaderButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  messageButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderRadius: 16,
+    padding: 8,
+    marginRight: 8,
+  },
 });
