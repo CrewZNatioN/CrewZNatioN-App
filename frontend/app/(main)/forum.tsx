@@ -176,7 +176,7 @@ export default function ForumScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <LinearGradient
-        colors={['#1E3A8A', '#3B82F6']}
+        colors={['#1A1A1A', '#2D2D2D']} // Dark gradient to match garage
         style={styles.header}
       >
         <Text style={styles.headerTitle}>Community Forum</Text>
