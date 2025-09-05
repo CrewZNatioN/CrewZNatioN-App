@@ -569,24 +569,6 @@ const styles = StyleSheet.create({
     color: '#666666',
     marginTop: 4,
   },
-  vehicleCardText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#CCCCCC',
-    textAlign: 'center',
-  },
-  vehicleCardBrand: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-  vehicleCardModel: {
-    fontSize: 12,
-    color: '#CCCCCC',
-    textAlign: 'center',
-    marginTop: 2,
-  },
   uploadButton: {
     backgroundColor: '#FFD700',
     paddingVertical: 16,
