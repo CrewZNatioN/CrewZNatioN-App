@@ -717,6 +717,7 @@ class CrewzNationAPITester:
         self.test_vehicle_database()
         self.test_posts_feed_api()
         self.test_events_api()
+        self.test_messaging_system()
         
         # Print summary
         self.print_summary()
