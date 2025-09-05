@@ -169,9 +169,6 @@ export default function EventsScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Car Meets & Events</Text>
-        </View>
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading events...</Text>
         </View>
