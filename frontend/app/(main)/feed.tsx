@@ -218,11 +218,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#1A1A1A',
   },
   headerLeft: {
-    
-    
-    
-    
-  flex: 1,
+    flex: 1,
   },,
   loadingContainer: {
     flex: 1,
