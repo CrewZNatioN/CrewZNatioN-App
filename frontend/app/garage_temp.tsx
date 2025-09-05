@@ -112,7 +112,8 @@ export default function GarageScreen() {
           await updateVehiclePhoto(
             selectedGarageVehicle.id, 
             manipulatedImage?.base64 || asset.base64,
-            asset.type
+            asset.type,
+            photoCaption
           );
         }
       }
