@@ -38,7 +38,7 @@ export default function CameraScreen() {
 
   useEffect(() => {
     getCameraPermissions();
-    fetchVehicles();
+    fetchUsers();
   }, []);
 
   const getCameraPermissions = async () => {
@@ -46,15 +46,20 @@ export default function CameraScreen() {
     setHasPermission(status === 'granted');
   };
 
-  const fetchVehicles = async () => {
+  const fetchUsers = async () => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/vehicles`);
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/users/search`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
-        setVehicles(data.slice(0, 20));
+        setUsers(data.slice(0, 20)); // Limit to first 20 users
       }
     } catch (error) {
-      console.error('Error fetching vehicles:', error);
+      console.error('Error fetching users:', error);
     }
   };
 
