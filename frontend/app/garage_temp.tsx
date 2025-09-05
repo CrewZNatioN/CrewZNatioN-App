@@ -358,7 +358,7 @@ export default function GarageScreen() {
               style={styles.addFirstVehicleGradient}
             >
               <Ionicons name="add-circle" size={24} color="#000000" />
-              <Text style={styles.addFirstVehicleText}>Add Your First Ride</Text>
+              <Text style={styles.addFirstVehicleText}>Add Your Ride</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
