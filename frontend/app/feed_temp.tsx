@@ -72,6 +72,13 @@ export default function FeedScreen() {
     fetchPosts();
   };
 
+  const handleMessage = (userId: string, username: string) => {
+    router.push({
+      pathname: '/chat',
+      params: { userId, username }
+    });
+  };
+
   const handleLike = async (postId: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
