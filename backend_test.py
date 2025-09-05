@@ -27,7 +27,8 @@ class CrewzNationAPITester:
             "oauth": {"passed": 0, "failed": 0, "details": []},
             "vehicles": {"passed": 0, "failed": 0, "details": []},
             "posts": {"passed": 0, "failed": 0, "details": []},
-            "events": {"passed": 0, "failed": 0, "details": []}
+            "events": {"passed": 0, "failed": 0, "details": []},
+            "messaging": {"passed": 0, "failed": 0, "details": []}
         }
         
     def log_result(self, category, test_name, success, message, response_data=None):
