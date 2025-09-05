@@ -127,7 +127,7 @@ export default function CameraScreen() {
         body: JSON.stringify({
           image: capturedImage,
           caption: caption.trim(),
-          vehicle_id: selectedVehicle,
+          tagged_users: taggedUsers,
         }),
       });
 
@@ -136,7 +136,9 @@ export default function CameraScreen() {
           { text: 'OK', onPress: () => {
             setCapturedImage(null);
             setCaption('');
-            setSelectedVehicle(null);
+            setTaggedUsers([]);
+            setUserSearchQuery('');
+            setShowUserSearch(false);
             router.push('/(main)/feed');
           }}
         ]);
