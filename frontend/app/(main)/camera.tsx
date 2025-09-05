@@ -15,7 +15,6 @@ import { Camera, CameraView } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 
@@ -49,7 +48,7 @@ export default function CameraScreen() {
       const response = await fetch(`${BACKEND_URL}/api/vehicles`);
       if (response.ok) {
         const data = await response.json();
-        setVehicles(data.slice(0, 20)); // Limit to first 20 vehicles
+        setVehicles(data.slice(0, 20));
       }
     } catch (error) {
       console.error('Error fetching vehicles:', error);
@@ -65,12 +64,9 @@ export default function CameraScreen() {
         });
         
         if (photo?.base64) {
-          // Apply basic editing/filters
           const manipulatedImage = await ImageManipulator.manipulateAsync(
             photo.uri,
-            [
-              { resize: { width: 1080 } }, // Resize for consistency
-            ],
+            [{ resize: { width: 1080 } }],
             {
               compress: 0.8,
               format: ImageManipulator.SaveFormat.JPEG,
@@ -160,7 +156,7 @@ export default function CameraScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.centerContent}>
-          <Ionicons name="camera-off" size={80} color="#9CA3AF" />
+          <Ionicons name="camera-off" size={80} color="#666666" />
           <Text style={styles.permissionText}>Camera access denied</Text>
           <Text style={styles.permissionSubText}>
             Please enable camera permissions in Settings to take photos
@@ -185,7 +181,6 @@ export default function CameraScreen() {
           facing={type}
         >
           <View style={styles.cameraOverlay}>
-            {/* Header */}
             <View style={styles.cameraHeader}>
               <TouchableOpacity 
                 style={styles.closeButton}
@@ -201,7 +196,6 @@ export default function CameraScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Bottom Controls */}
             <View style={styles.cameraControls}>
               <TouchableOpacity style={styles.galleryIcon}>
                 <Ionicons name="images" size={30} color="#FFFFFF" />
@@ -224,12 +218,9 @@ export default function CameraScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#1E3A8A', '#3B82F6']}
-        style={styles.header}
-      >
+      <View style={styles.header}>
         <Text style={styles.headerTitle}>Share Your Ride</Text>
-      </LinearGradient>
+      </View>
 
       <ScrollView style={styles.content}>
         {capturedImage ? (
@@ -250,7 +241,7 @@ export default function CameraScreen() {
                 style={styles.editButton}
                 onPress={() => setShowCamera(true)}
               >
-                <Ionicons name="camera" size={20} color="#3B82F6" />
+                <Ionicons name="camera" size={20} color="#FFD700" />
                 <Text style={styles.editButtonText}>Retake</Text>
               </TouchableOpacity>
             </View>
@@ -261,26 +252,20 @@ export default function CameraScreen() {
               style={styles.captureOption}
               onPress={() => setShowCamera(true)}
             >
-              <LinearGradient
-                colors={['#FCD34D', '#F59E0B']}
-                style={styles.captureOptionGradient}
-              >
-                <Ionicons name="camera" size={40} color="#1E3A8A" />
+              <View style={styles.captureOptionContent}>
+                <Ionicons name="camera" size={40} color="#FFD700" />
                 <Text style={styles.captureOptionText}>Take Photo</Text>
-              </LinearGradient>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity 
               style={styles.captureOption}
               onPress={pickImageFromGallery}
             >
-              <LinearGradient
-                colors={['#3B82F6', '#1E3A8A']}
-                style={styles.captureOptionGradient}
-              >
-                <Ionicons name="images" size={40} color="#FFFFFF" />
-                <Text style={styles.captureOptionTextWhite}>Choose from Gallery</Text>
-              </LinearGradient>
+              <View style={styles.captureOptionContent}>
+                <Ionicons name="images" size={40} color="#FFD700" />
+                <Text style={styles.captureOptionText}>Choose from Gallery</Text>
+              </View>
             </TouchableOpacity>
           </View>
         )}
@@ -291,7 +276,7 @@ export default function CameraScreen() {
           <TextInput
             style={styles.captionInput}
             placeholder="Share something about your ride..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#666666"
             value={caption}
             onChangeText={setCaption}
             multiline
@@ -342,18 +327,9 @@ export default function CameraScreen() {
           onPress={uploadPost}
           disabled={!capturedImage || !caption.trim() || uploading}
         >
-          <LinearGradient
-            colors={
-              capturedImage && caption.trim() && !uploading
-                ? ['#FCD34D', '#F59E0B']
-                : ['#9CA3AF', '#6B7280']
-            }
-            style={styles.uploadButtonGradient}
-          >
-            <Text style={styles.uploadButtonText}>
-              {uploading ? 'Uploading...' : 'Share Post'}
-            </Text>
-          </LinearGradient>
+          <Text style={styles.uploadButtonText}>
+            {uploading ? 'Uploading...' : 'Share Post'}
+          </Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -363,11 +339,14 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#000000',
   },
   header: {
     paddingVertical: 16,
     paddingHorizontal: 20,
+    backgroundColor: '#000000',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
   },
   headerTitle: {
     fontSize: 24,
@@ -384,13 +363,13 @@ const styles = StyleSheet.create({
   permissionText: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: '#FFFFFF',
     textAlign: 'center',
     marginTop: 16,
   },
   permissionSubText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#CCCCCC',
     textAlign: 'center',
     marginTop: 8,
     marginBottom: 24,
@@ -442,13 +421,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 4,
-    borderColor: '#FCD34D',
+    borderColor: '#FFD700',
   },
   captureInner: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: '#FCD34D',
+    backgroundColor: '#FFD700',
   },
   placeholder: {
     width: 60,
@@ -460,20 +439,17 @@ const styles = StyleSheet.create({
   captureOption: {
     marginBottom: 16,
   },
-  captureOptionGradient: {
+  captureOptionContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 20,
     borderRadius: 16,
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   captureOptionText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1E3A8A',
-    marginLeft: 12,
-  },
-  captureOptionTextWhite: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#FFFFFF',
@@ -497,15 +473,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1A1A1A',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#333333',
   },
   editButtonText: {
     marginLeft: 8,
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: '#FFFFFF',
   },
   captionSection: {
     marginBottom: 24,
@@ -513,84 +489,84 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#374151',
+    color: '#FFFFFF',
     marginBottom: 12,
   },
   captionInput: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1A1A1A',
     borderRadius: 12,
     padding: 16,
     minHeight: 100,
     fontSize: 16,
-    color: '#374151',
+    color: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#333333',
     textAlignVertical: 'top',
   },
   characterCount: {
     textAlign: 'right',
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#666666',
     marginTop: 4,
   },
   vehicleSection: {
     marginBottom: 32,
   },
   vehicleCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1A1A1A',
     borderRadius: 12,
     padding: 12,
     marginRight: 12,
     minWidth: 120,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: '#333333',
   },
   vehicleCardSelected: {
-    borderColor: '#FCD34D',
-    backgroundColor: '#FFFBEB',
+    borderColor: '#FFD700',
+    backgroundColor: '#2A2A00',
   },
   vehicleCardText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: '#CCCCCC',
     textAlign: 'center',
   },
   vehicleCardBrand: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#1E3A8A',
+    color: '#FFFFFF',
     textAlign: 'center',
   },
   vehicleCardModel: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#CCCCCC',
     textAlign: 'center',
     marginTop: 2,
   },
   uploadButton: {
-    marginBottom: 40,
-  },
-  uploadButtonDisabled: {
-    opacity: 0.6,
-  },
-  uploadButtonGradient: {
+    backgroundColor: '#FFD700',
     paddingVertical: 16,
     borderRadius: 16,
     alignItems: 'center',
+    marginBottom: 40,
+  },
+  uploadButtonDisabled: {
+    backgroundColor: '#333333',
+    opacity: 0.6,
   },
   uploadButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1E3A8A',
+    color: '#000000',
   },
   galleryButton: {
-    backgroundColor: '#3B82F6',
+    backgroundColor: '#FFD700',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
   },
   galleryButtonText: {
-    color: '#FFFFFF',
+    color: '#000000',
     fontSize: 16,
     fontWeight: '600',
   },

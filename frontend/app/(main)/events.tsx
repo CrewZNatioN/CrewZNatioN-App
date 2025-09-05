@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
@@ -69,7 +68,6 @@ export default function EventsScreen() {
 
       if (response.ok) {
         Alert.alert('Success', 'You have joined the event!');
-        // Update local state
         setEvents(prev => prev.map(event => 
           event.id === eventId 
             ? { ...event, attendees: [...event.attendees, 'current_user'] }
@@ -97,14 +95,11 @@ export default function EventsScreen() {
 
   const renderEvent = ({ item }: { item: Event }) => {
     const dateInfo = formatDate(item.date);
-    const isJoined = item.attendees.includes('current_user'); // This would be replaced with actual user ID
+    const isJoined = item.attendees.includes('current_user');
 
     return (
       <TouchableOpacity style={styles.eventCard}>
-        <LinearGradient
-          colors={['#FFFFFF', '#F9FAFB']}
-          style={styles.eventCardGradient}
-        >
+        <View style={styles.eventCardContent}>
           {/* Event Date Badge */}
           <View style={styles.dateBadge}>
             <Text style={styles.dateBadgeDay}>{dateInfo.day}</Text>
@@ -128,19 +123,19 @@ export default function EventsScreen() {
             
             <View style={styles.eventMeta}>
               <View style={styles.eventMetaItem}>
-                <Ionicons name="time-outline" size={16} color="#6B7280" />
+                <Ionicons name="time-outline" size={16} color="#CCCCCC" />
                 <Text style={styles.eventMetaText}>{dateInfo.time}</Text>
               </View>
               
               <View style={styles.eventMetaItem}>
-                <Ionicons name="location-outline" size={16} color="#6B7280" />
+                <Ionicons name="location-outline" size={16} color="#CCCCCC" />
                 <Text style={styles.eventMetaText} numberOfLines={1}>
                   {item.location}
                 </Text>
               </View>
               
               <View style={styles.eventMetaItem}>
-                <Ionicons name="people-outline" size={16} color="#6B7280" />
+                <Ionicons name="people-outline" size={16} color="#CCCCCC" />
                 <Text style={styles.eventMetaText}>
                   {item.attendees.length} attending
                 </Text>
@@ -159,7 +154,7 @@ export default function EventsScreen() {
                 <Ionicons 
                   name={isJoined ? "checkmark-circle" : "add-circle-outline"} 
                   size={20} 
-                  color={isJoined ? "#FFFFFF" : "#1E3A8A"} 
+                  color={isJoined ? "#000000" : "#FFD700"} 
                 />
                 <Text style={[
                   styles.joinButtonText,
@@ -170,11 +165,11 @@ export default function EventsScreen() {
               </TouchableOpacity>
               
               <TouchableOpacity style={styles.shareButton}>
-                <Ionicons name="share-outline" size={20} color="#6B7280" />
+                <Ionicons name="share-outline" size={20} color="#CCCCCC" />
               </TouchableOpacity>
             </View>
           </View>
-        </LinearGradient>
+        </View>
       </TouchableOpacity>
     );
   };
@@ -182,12 +177,9 @@ export default function EventsScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <LinearGradient
-          colors={['#1E3A8A', '#3B82F6']}
-          style={styles.header}
-        >
+        <View style={styles.header}>
           <Text style={styles.headerTitle}>Car Meets & Events</Text>
-        </LinearGradient>
+        </View>
         <View style={styles.loadingContainer}>
           <Text style={styles.loadingText}>Loading events...</Text>
         </View>
@@ -197,31 +189,25 @@ export default function EventsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#1E3A8A', '#3B82F6']}
-        style={styles.header}
-      >
+      <View style={styles.header}>
         <Text style={styles.headerTitle}>Car Meets & Events</Text>
         <TouchableOpacity style={styles.createButton}>
-          <Ionicons name="add" size={24} color="#1E3A8A" />
+          <Ionicons name="add" size={24} color="#000000" />
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
 
       {events.length === 0 ? (
         <View style={styles.emptyContainer}>
-          <Ionicons name="calendar-outline" size={80} color="#9CA3AF" />
+          <Ionicons name="calendar-outline" size={80} color="#666666" />
           <Text style={styles.emptyTitle}>No Events Yet</Text>
           <Text style={styles.emptySubtitle}>
             Be the first to create an event in your area!
           </Text>
           <TouchableOpacity style={styles.createEventButton}>
-            <LinearGradient
-              colors={['#FCD34D', '#F59E0B']}
-              style={styles.createEventGradient}
-            >
-              <Ionicons name="add" size={20} color="#1E3A8A" />
+            <View style={styles.createEventContent}>
+              <Ionicons name="add" size={20} color="#000000" />
               <Text style={styles.createEventText}>Create Event</Text>
-            </LinearGradient>
+            </View>
           </TouchableOpacity>
         </View>
       ) : (
@@ -230,7 +216,11 @@ export default function EventsScreen() {
           renderItem={renderEvent}
           keyExtractor={(item) => item.id}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl 
+              refreshing={refreshing} 
+              onRefresh={onRefresh}
+              tintColor="#FFD700"
+            />
           }
           contentContainerStyle={styles.eventsList}
           showsVerticalScrollIndicator={false}
@@ -243,7 +233,7 @@ export default function EventsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#000000',
   },
   header: {
     flexDirection: 'row',
@@ -251,6 +241,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingVertical: 16,
+    backgroundColor: '#000000',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
   },
   headerTitle: {
     fontSize: 20,
@@ -258,7 +251,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   createButton: {
-    backgroundColor: '#FCD34D',
+    backgroundColor: '#FFD700',
     borderRadius: 20,
     padding: 8,
   },
@@ -269,7 +262,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: '#CCCCCC',
   },
   emptyContainer: {
     flex: 1,
@@ -280,30 +273,31 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#374151',
+    color: '#FFFFFF',
     marginTop: 16,
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 16,
-    color: '#6B7280',
+    color: '#CCCCCC',
     textAlign: 'center',
     marginBottom: 24,
   },
   createEventButton: {
     marginTop: 16,
   },
-  createEventGradient: {
+  createEventContent: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 16,
+    backgroundColor: '#FFD700',
   },
   createEventText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1E3A8A',
+    color: '#000000',
     marginLeft: 8,
   },
   eventsList: {
@@ -315,18 +309,21 @@ const styles = StyleSheet.create({
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  eventCardGradient: {
+  eventCardContent: {
     borderRadius: 16,
     overflow: 'hidden',
+    backgroundColor: '#1A1A1A',
+    borderWidth: 1,
+    borderColor: '#333333',
   },
   dateBadge: {
     position: 'absolute',
     top: 16,
     right: 16,
-    backgroundColor: '#FCD34D',
+    backgroundColor: '#FFD700',
     borderRadius: 12,
     padding: 8,
     alignItems: 'center',
@@ -336,12 +333,12 @@ const styles = StyleSheet.create({
   dateBadgeDay: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1E3A8A',
+    color: '#000000',
   },
   dateBadgeMonth: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#000000',
   },
   eventImage: {
     width: '100%',
@@ -354,12 +351,12 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#1E3A8A',
+    color: '#FFFFFF',
     marginBottom: 8,
   },
   eventDescription: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#CCCCCC',
     lineHeight: 20,
     marginBottom: 16,
   },
@@ -373,7 +370,7 @@ const styles = StyleSheet.create({
   },
   eventMetaText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#CCCCCC',
     marginLeft: 8,
     flex: 1,
   },
@@ -385,9 +382,9 @@ const styles = StyleSheet.create({
   joinButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#000000',
     borderWidth: 2,
-    borderColor: '#1E3A8A',
+    borderColor: '#FFD700',
     borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -395,22 +392,22 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   joinedButton: {
-    backgroundColor: '#10B981',
-    borderColor: '#10B981',
+    backgroundColor: '#FFD700',
+    borderColor: '#FFD700',
   },
   joinButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#FFD700',
     marginLeft: 6,
   },
   joinedButtonText: {
-    color: '#FFFFFF',
+    color: '#000000',
   },
   shareButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#333333',
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: '#555555',
     borderRadius: 12,
     padding: 10,
   },
