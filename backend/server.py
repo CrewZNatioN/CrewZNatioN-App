@@ -55,7 +55,7 @@ class User(BaseModel):
 class PostCreate(BaseModel):
     image: str  # base64 encoded
     caption: str
-    vehicle_id: Optional[str] = None
+    tagged_users: Optional[List[str]] = []
 
 class Post(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
