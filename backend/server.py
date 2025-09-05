@@ -652,6 +652,164 @@ async def initialize_vehicles():
     await db.vehicles.insert_many(vehicles_to_insert)
     return {"message": f"Initialized {len(vehicles_to_insert)} vehicles"}
 
+# Messaging Routes
+@api_router.post("/messages/send")
+async def send_message(message_data: MessageCreate, current_user: dict = Depends(get_current_user)):
+    # Check if receiver exists
+    receiver = await db.users.find_one({"id": message_data.receiver_id})
+    if not receiver:
+        raise HTTPException(status_code=404, detail="Receiver not found")
+    
+    # Create message
+    message = Message(
+        sender_id=current_user["id"],
+        receiver_id=message_data.receiver_id,
+        content=message_data.content,
+        message_type=message_data.message_type,
+        media_url=message_data.media_url
+    )
+    
+    # Insert message
+    await db.messages.insert_one(message.dict())
+    
+    # Create or update conversation
+    conversation_filter = {
+        "$or": [
+            {"user1_id": current_user["id"], "user2_id": message_data.receiver_id},
+            {"user1_id": message_data.receiver_id, "user2_id": current_user["id"]}
+        ]
+    }
+    
+    existing_conversation = await db.conversations.find_one(conversation_filter)
+    
+    if existing_conversation:
+        # Update existing conversation
+        updates = {
+            "last_message": message_data.content,
+            "last_message_time": message.created_at,
+            "updated_at": message.created_at
+        }
+        
+        # Increment unread count for receiver
+        if existing_conversation["user1_id"] == message_data.receiver_id:
+            updates["user1_unread_count"] = existing_conversation.get("user1_unread_count", 0) + 1
+        else:
+            updates["user2_unread_count"] = existing_conversation.get("user2_unread_count", 0) + 1
+        
+        await db.conversations.update_one(conversation_filter, {"$set": updates})
+    else:
+        # Create new conversation
+        conversation = Conversation(
+            user1_id=current_user["id"],
+            user2_id=message_data.receiver_id,
+            last_message=message_data.content,
+            last_message_time=message.created_at,
+            user2_unread_count=1  # Receiver has one unread message
+        )
+        await db.conversations.insert_one(conversation.dict())
+    
+    return {
+        "message": "Message sent successfully",
+        "message_id": message.id
+    }
+
+@api_router.get("/messages/conversations")
+async def get_conversations(current_user: dict = Depends(get_current_user)):
+    # Get all conversations for current user
+    conversations = await db.conversations.find({
+        "$or": [
+            {"user1_id": current_user["id"]},
+            {"user2_id": current_user["id"]}
+        ]
+    }).sort("updated_at", -1).to_list(None)
+    
+    # Get user details for each conversation
+    result = []
+    for conv in conversations:
+        other_user_id = conv["user2_id"] if conv["user1_id"] == current_user["id"] else conv["user1_id"]
+        other_user = await db.users.find_one({"id": other_user_id})
+        
+        if other_user:
+            unread_count = (
+                conv.get("user1_unread_count", 0) if conv["user1_id"] == current_user["id"] 
+                else conv.get("user2_unread_count", 0)
+            )
+            
+            result.append({
+                "conversation_id": conv["id"],
+                "other_user": {
+                    "id": other_user["id"],
+                    "username": other_user["username"],
+                    "profile_picture": other_user.get("profile_picture")
+                },
+                "last_message": conv.get("last_message", ""),
+                "last_message_time": conv.get("last_message_time"),
+                "unread_count": unread_count
+            })
+    
+    return result
+
+@api_router.get("/messages/{conversation_partner_id}")
+async def get_messages(conversation_partner_id: str, current_user: dict = Depends(get_current_user)):
+    # Verify conversation partner exists
+    partner = await db.users.find_one({"id": conversation_partner_id})
+    if not partner:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Get messages between users
+    messages = await db.messages.find({
+        "$or": [
+            {"sender_id": current_user["id"], "receiver_id": conversation_partner_id},
+            {"sender_id": conversation_partner_id, "receiver_id": current_user["id"]}
+        ]
+    }).sort("created_at", 1).to_list(None)
+    
+    # Mark messages as read
+    await db.messages.update_many(
+        {"sender_id": conversation_partner_id, "receiver_id": current_user["id"], "is_read": False},
+        {"$set": {"is_read": True}}
+    )
+    
+    # Reset unread count in conversation
+    await db.conversations.update_one(
+        {
+            "$or": [
+                {"user1_id": current_user["id"], "user2_id": conversation_partner_id},
+                {"user1_id": conversation_partner_id, "user2_id": current_user["id"]}
+            ]
+        },
+        {
+            "$set": {
+                "user1_unread_count": 0 if await db.conversations.find_one({"user1_id": current_user["id"]}) else None,
+                "user2_unread_count": 0 if await db.conversations.find_one({"user2_id": current_user["id"]}) else None
+            }
+        }
+    )
+    
+    return messages
+
+@api_router.get("/users/search")
+async def search_users(q: str, current_user: dict = Depends(get_current_user)):
+    if len(q) < 2:
+        return []
+    
+    # Search users by username (case insensitive)
+    users = await db.users.find({
+        "username": {"$regex": q, "$options": "i"},
+        "id": {"$ne": current_user["id"]}  # Exclude current user
+    }).to_list(20)  # Limit to 20 users
+    
+    # Return only necessary fields
+    result = []
+    for user in users:
+        result.append({
+            "id": user["id"],
+            "username": user["username"],
+            "profile_picture": user.get("profile_picture")
+        })
+    
+    return result
+
 # Include the router in the main app
 app.include_router(api_router)
 
