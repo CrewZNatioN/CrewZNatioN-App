@@ -342,6 +342,28 @@ export default function GarageScreen() {
         <View style={styles.usernameSection}>
           <Text style={styles.usernameText}>{username ? `@${username}` : "@username"}</Text>
         </View>
+        
+        {/* Garage Tools Panel */}
+        {showGarageTools && (
+          <View style={styles.garageToolsPanel}>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="settings-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Garage Settings</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="analytics-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Vehicle Stats</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="share-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Share Garage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="download-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Export List</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </LinearGradient>
 
       {userVehicles.length === 0 ? (
