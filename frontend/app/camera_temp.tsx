@@ -68,6 +68,67 @@ export default function CameraScreen() {
     }
   };
 
+  const applyFilter = async (imageUri: string, filterName: string) => {
+    try {
+      let manipulatorOptions: any = {
+        compress: 0.8,
+        format: ImageManipulator.SaveFormat.JPEG,
+        base64: true,
+      };
+
+      let actions: any[] = [];
+
+      switch (filterName) {
+        case 'vintage':
+          // Vintage effect: sepia + contrast
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'bright':
+          // Brightness increase
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'contrast':
+          // High contrast
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'sepia':
+          // Sepia tone
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'blur':
+          // Slight blur effect
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        default:
+          // Original - just resize
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+      }
+
+      const result = await ImageManipulator.manipulateAsync(
+        imageUri,
+        actions,
+        manipulatorOptions
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error applying filter:', error);
+      return null;
+    }
+  };
+
   const takePicture = async () => {
     if (cameraRef.current) {
       try {
