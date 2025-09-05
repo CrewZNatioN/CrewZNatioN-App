@@ -509,9 +509,25 @@ async def get_vehicle(vehicle_id: str):
 
 # Events Routes
 @api_router.get("/events")
-async def get_events():
-    events = await db.events.find({}, {"_id": 0}).sort("date", 1).to_list(100)
-    return events
+async def get_events(current_user: dict = Depends(get_current_user)):
+    # Get public events and private events where user is invited
+    events = await db.events.find({
+        "$or": [
+            {"is_private": False},  # Public events
+            {"invited_users": current_user["id"]},  # Private events where user is invited
+            {"organizer_id": current_user["id"]}  # Events organized by user
+        ]
+    }).sort("date", 1).to_list(100)
+    
+    # Add privacy indicator and invitation status
+    event_list = []
+    for event in events:
+        event_data = event.copy()
+        event_data["can_join"] = not event["is_private"] or current_user["id"] in event["invited_users"]
+        event_data["is_invited"] = current_user["id"] in event.get("invited_users", [])
+        event_list.append(event_data)
+    
+    return event_list
 
 @api_router.post("/events")
 async def create_event(event_data: Dict[str, Any], current_user: dict = Depends(get_current_user)):
@@ -521,11 +537,46 @@ async def create_event(event_data: Dict[str, Any], current_user: dict = Depends(
         date=datetime.fromisoformat(event_data["date"]),
         location=event_data["location"],
         organizer_id=current_user["id"],
-        image=event_data.get("image")
+        image=event_data.get("image"),
+        is_private=event_data.get("is_private", False),
+        invited_users=event_data.get("invited_users", [])
     )
     
     await db.events.insert_one(event.dict())
     return {"message": "Event created successfully", "event_id": event.id}
+
+@api_router.post("/events/{event_id}/invite")
+async def invite_to_event(event_id: str, invite_data: dict, current_user: dict = Depends(get_current_user)):
+    # Only event organizer can invite users
+    event = await db.events.find_one({"id": event_id, "organizer_id": current_user["id"]})
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found or you're not the organizer")
+    
+    user_ids = invite_data.get("user_ids", [])
+    await db.events.update_one(
+        {"id": event_id},
+        {"$addToSet": {"invited_users": {"$each": user_ids}}}
+    )
+    
+    return {"message": f"Invited {len(user_ids)} users to the event"}
+
+@api_router.post("/events/{event_id}/join")
+async def join_event(event_id: str, current_user: dict = Depends(get_current_user)):
+    event = await db.events.find_one({"id": event_id})
+    if not event:
+        raise HTTPException(status_code=404, detail="Event not found")
+    
+    # Check if user can join (public event or invited to private event)
+    if event["is_private"] and current_user["id"] not in event.get("invited_users", []):
+        raise HTTPException(status_code=403, detail="This is a private event and you're not invited")
+    
+    # Add user to attendees
+    await db.events.update_one(
+        {"id": event_id},
+        {"$addToSet": {"attendees": current_user["id"]}}
+    )
+    
+    return {"message": "Successfully joined the event"}
 
 # Initialize sample vehicles data
 @api_router.post("/init/vehicles")
