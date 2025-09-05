@@ -181,13 +181,6 @@ export default function EventsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Car Meets & Events</Text>
-        <TouchableOpacity style={styles.createButton}>
-          <Ionicons name="add" size={24} color="#000000" />
-        </TouchableOpacity>
-      </View>
-
       {events.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Ionicons name="calendar-outline" size={80} color="#666666" />
