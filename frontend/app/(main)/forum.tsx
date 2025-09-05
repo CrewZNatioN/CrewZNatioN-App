@@ -188,11 +188,11 @@ export default function ForumScreen() {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Ionicons name="search" size={20} color="#9CA3AF" />
+          <Ionicons name="search" size={20} color="#666666" />
           <TextInput
             style={styles.searchInput}
             placeholder="Search discussions..."
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor="#666666"
             value={searchQuery}
             onChangeText={setSearchQuery}
           />
