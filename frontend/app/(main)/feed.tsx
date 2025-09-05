@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1A1A1A',
   },
-  headerTitle: {
+  headerLeft: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#FFFFFF',
