@@ -12,12 +12,14 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useRouter } from 'expo-router';
 
 const { width } = Dimensions.get('window');
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
 interface Post {
   _id: string;
+  user_id: string;
   user: {
     username: string;
     profilePicture?: string;
@@ -35,6 +37,7 @@ interface Post {
 }
 
 export default function FeedScreen() {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -67,6 +70,13 @@ export default function FeedScreen() {
   const onRefresh = () => {
     setRefreshing(true);
     fetchPosts();
+  };
+
+  const handleMessage = (userId: string, username: string) => {
+    router.push({
+      pathname: '/chat',
+      params: { userId, username }
+    });
   };
 
   const handleLike = async (postId: string) => {
@@ -113,9 +123,17 @@ export default function FeedScreen() {
             )}
           </View>
         </View>
-        <TouchableOpacity>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#CCCCCC" />
-        </TouchableOpacity>
+        <View style={styles.postHeaderButtons}>
+          <TouchableOpacity 
+            style={styles.messageButton}
+            onPress={() => handleMessage(item.user_id, item.user.username)}
+          >
+            <Ionicons name="chatbubble-outline" size={20} color="#FFD700" />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Ionicons name="ellipsis-horizontal" size={24} color="#CCCCCC" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Post Image */}
@@ -311,5 +329,15 @@ const styles = StyleSheet.create({
   timeAgo: {
     fontSize: 12,
     color: '#666666',
+  },
+  postHeaderButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  messageButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderRadius: 16,
+    padding: 8,
+    marginRight: 8,
   },
 });
