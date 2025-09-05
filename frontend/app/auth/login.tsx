@@ -362,10 +362,6 @@ const styles = StyleSheet.create({
     color: '#FFD700',
     marginBottom: 8,
   },
-  signInText: {
-    fontSize: 16,
-    color: '#9CA3AF',
-  },
   toggleContainer: {
     flexDirection: 'row',
     marginBottom: 32,
