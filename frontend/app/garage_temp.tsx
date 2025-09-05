@@ -775,6 +775,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  usernameSection: {
+    alignItems: 'center',
+    marginTop: 8,
+  },
   statItem: {
     alignItems: 'center',
   },
