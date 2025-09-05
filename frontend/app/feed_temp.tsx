@@ -41,7 +41,6 @@ export default function FeedScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const fetchPosts = async () => {
     try {
