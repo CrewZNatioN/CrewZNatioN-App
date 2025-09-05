@@ -47,7 +47,6 @@ export default function GarageScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [username, setUsername] = useState<string>('');
-  const [showGarageTools, setShowGarageTools] = useState(false);
 
   const fetchUserData = async () => {
     try {
