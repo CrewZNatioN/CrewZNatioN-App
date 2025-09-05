@@ -641,6 +641,36 @@ async def initialize_vehicles():
         # Audi
         {"make": "Audi", "model": "RS6 Avant", "year": 2023, "type": "wagon", "horsepower": 591, "engine": "4.0L Twin-Turbo V8"},
         {"make": "Audi", "model": "R8 V10", "year": 2023, "type": "coupe", "horsepower": 562, "engine": "5.2L V10"},
+        
+        # Motorcycles - Yamaha
+        {"make": "Yamaha", "model": "YZF-R1", "year": 2023, "type": "motorcycle", "horsepower": 200, "engine": "998cc Inline-4"},
+        {"make": "Yamaha", "model": "MT-09", "year": 2023, "type": "motorcycle", "horsepower": 119, "engine": "847cc Triple"},
+        {"make": "Yamaha", "model": "R6", "year": 2023, "type": "motorcycle", "horsepower": 118, "engine": "599cc Inline-4"},
+        
+        # Motorcycles - Honda
+        {"make": "Honda", "model": "CBR1000RR-R", "year": 2023, "type": "motorcycle", "horsepower": 217, "engine": "999cc Inline-4"},
+        {"make": "Honda", "model": "CB650R", "year": 2023, "type": "motorcycle", "horsepower": 94, "engine": "649cc Inline-4"},
+        {"make": "Honda", "model": "Gold Wing", "year": 2023, "type": "motorcycle", "horsepower": 126, "engine": "1833cc Flat-6"},
+        
+        # Motorcycles - Kawasaki
+        {"make": "Kawasaki", "model": "Ninja ZX-10R", "year": 2023, "type": "motorcycle", "horsepower": 203, "engine": "998cc Inline-4"},
+        {"make": "Kawasaki", "model": "Z900", "year": 2023, "type": "motorcycle", "horsepower": 125, "engine": "948cc Inline-4"},
+        {"make": "Kawasaki", "model": "Ninja 400", "year": 2023, "type": "motorcycle", "horsepower": 45, "engine": "399cc Twin"},
+        
+        # Motorcycles - Suzuki
+        {"make": "Suzuki", "model": "GSX-R1000R", "year": 2023, "type": "motorcycle", "horsepower": 202, "engine": "999cc Inline-4"},
+        {"make": "Suzuki", "model": "SV650", "year": 2023, "type": "motorcycle", "horsepower": 76, "engine": "645cc V-Twin"},
+        {"make": "Suzuki", "model": "Hayabusa", "year": 2023, "type": "motorcycle", "horsepower": 190, "engine": "1340cc Inline-4"},
+        
+        # Motorcycles - Ducati
+        {"make": "Ducati", "model": "Panigale V4", "year": 2023, "type": "motorcycle", "horsepower": 214, "engine": "1103cc V4"},
+        {"make": "Ducati", "model": "Monster 937", "year": 2023, "type": "motorcycle", "horsepower": 111, "engine": "937cc L-Twin"},
+        {"make": "Ducati", "model": "Multistrada V4", "year": 2023, "type": "motorcycle", "horsepower": 170, "engine": "1158cc V4"},
+        
+        # Motorcycles - Harley-Davidson
+        {"make": "Harley-Davidson", "model": "Road Glide", "year": 2023, "type": "motorcycle", "horsepower": 90, "engine": "1868cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Sportster S", "year": 2023, "type": "motorcycle", "horsepower": 121, "engine": "1252cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Fat Boy", "year": 2023, "type": "motorcycle", "horsepower": 86, "engine": "1868cc V-Twin"},
     ]
     
     # Add vehicle objects with proper structure
