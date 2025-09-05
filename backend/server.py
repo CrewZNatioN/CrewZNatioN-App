@@ -953,6 +953,7 @@ async def update_vehicle_photo(vehicle_id: str, photo_data: dict, current_user: 
                 "$set": {
                     "image": photo_data.get("image"),
                     "media_type": photo_data.get("media_type", "image"),
+                    "caption": photo_data.get("caption", ""),
                     "updated_at": datetime.utcnow()
                 }
             }
