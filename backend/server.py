@@ -235,6 +235,33 @@ async def get_session_data(x_session_id: str = Header(...)):
     except Exception as e:
         raise HTTPException(status_code=401, detail="Session validation failed")
 
+# User Routes
+@api_router.get("/users/search")
+async def search_users(current_user: dict = Depends(get_current_user), q: str = ""):
+    # Search for users by username or email
+    if q:
+        users = await db.users.find({
+            "$or": [
+                {"username": {"$regex": q, "$options": "i"}},
+                {"email": {"$regex": q, "$options": "i"}}
+            ]
+        }).limit(20).to_list(20)
+    else:
+        # Return all users if no query (for tagging)
+        users = await db.users.find().limit(20).to_list(20)
+    
+    # Return simplified user data for tagging
+    return [
+        {
+            "id": user["id"],
+            "username": user["username"],
+            "email": user["email"],
+            "profile_picture": user.get("profile_picture")
+        }
+        for user in users
+        if user["id"] != current_user["id"]  # Exclude current user
+    ]
+
 # Posts Routes
 @api_router.get("/posts/feed")
 async def get_feed(current_user: dict = Depends(get_current_user)):
