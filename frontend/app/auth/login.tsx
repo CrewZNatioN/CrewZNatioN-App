@@ -143,25 +143,7 @@ export default function LoginScreen() {
             <Text style={styles.welcomeText}>Welcome Back</Text>
           </View>
 
-          {/* Toggle Buttons */}
-          <View style={styles.toggleContainer}>
-            <TouchableOpacity 
-              style={[styles.toggleButton, isLogin && styles.activeToggle]}
-              onPress={() => setIsLogin(true)}
-            >
-              <Text style={[styles.toggleText, isLogin && styles.activeToggleText]}>
-                Sign In
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity 
-              style={[styles.toggleButton, !isLogin && styles.activeToggle]}
-              onPress={() => setIsLogin(false)}
-            >
-              <Text style={[styles.toggleText, !isLogin && styles.activeToggleText]}>
-                Sign Up
-              </Text>
-            </TouchableOpacity>
-          </View>
+          {/* Toggle Buttons - REMOVED as requested */}
 
           {/* Form Section */}
           <View style={styles.formContainer}>
