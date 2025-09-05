@@ -218,11 +218,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#1A1A1A',
   },
   headerLeft: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    letterSpacing: 1,
-  },
+    
+    
+    
+    
+  flex: 1,
+  },,
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
