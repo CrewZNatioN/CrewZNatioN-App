@@ -40,7 +40,7 @@ class UserCreate(BaseModel):
     password: str
 
 class UserLogin(BaseModel):
-    email: EmailStr
+    email: str  # This will accept both email and username
     password: str
 
 class User(BaseModel):
