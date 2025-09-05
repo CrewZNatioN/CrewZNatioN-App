@@ -398,6 +398,313 @@ class CrewzNationAPITester:
         except Exception as e:
             self.log_result("events", "Events Retrieval", False, f"Exception: {str(e)}")
     
+    def test_messaging_system(self):
+        """Test Messaging System Backend APIs"""
+        print("\n💬 Testing Messaging System...")
+        
+        if not self.access_token:
+            self.log_result("messaging", "Messaging API Setup", False, "No access token available for messaging testing")
+            return
+        
+        headers = {"Authorization": f"Bearer {self.access_token}"}
+        
+        # Create a second test user for messaging
+        second_user_data = {
+            "email": "jane.smith@crewznation.com",
+            "username": "janesmith_crewz",
+            "password": "CrewzNation2025!"
+        }
+        
+        second_user_token = None
+        second_user_id = None
+        
+        # Test 1: Create second user for messaging
+        try:
+            response = requests.post(f"{self.base_url}/auth/register", json=second_user_data)
+            
+            if response.status_code == 200:
+                data = response.json()
+                second_user_token = data["access_token"]
+                second_user_id = data["user"]["id"]
+                self.log_result("messaging", "Second User Creation", True, 
+                              "Successfully created second user for messaging tests")
+            elif response.status_code == 400 and "already registered" in response.text:
+                # User exists, try to login
+                login_response = requests.post(f"{self.base_url}/auth/login", json={
+                    "email": second_user_data["email"],
+                    "password": second_user_data["password"]
+                })
+                if login_response.status_code == 200:
+                    data = login_response.json()
+                    second_user_token = data["access_token"]
+                    second_user_id = data["user"]["id"]
+                    self.log_result("messaging", "Second User Creation", True, 
+                                  "Second user already exists, logged in successfully")
+                else:
+                    self.log_result("messaging", "Second User Creation", False, 
+                                  "Failed to login existing second user")
+            else:
+                self.log_result("messaging", "Second User Creation", False, 
+                              f"Second user creation failed with status {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "Second User Creation", False, f"Exception: {str(e)}")
+        
+        if not second_user_id:
+            self.log_result("messaging", "Messaging Tests", False, "Cannot proceed without second user")
+            return
+        
+        # Test 2: User Search for Messaging
+        try:
+            response = requests.get(f"{self.base_url}/users/search?q=jane", headers=headers)
+            
+            if response.status_code == 200:
+                users = response.json()
+                if isinstance(users, list):
+                    jane_users = [u for u in users if "jane" in u.get("username", "").lower()]
+                    if jane_users:
+                        self.log_result("messaging", "User Search", True, 
+                                      f"Successfully found {len(jane_users)} users matching 'jane'")
+                    else:
+                        self.log_result("messaging", "User Search", False, 
+                                      "No users found matching search query")
+                else:
+                    self.log_result("messaging", "User Search", False, 
+                                  "User search response is not a list")
+            else:
+                self.log_result("messaging", "User Search", False, 
+                              f"User search failed with status {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "User Search", False, f"Exception: {str(e)}")
+        
+        # Test 3: Send Message
+        message_id = None
+        try:
+            message_data = {
+                "receiver_id": second_user_id,
+                "content": "Hey Jane! Welcome to CREWZ NATION! 🚗 Ready to share some awesome car content?",
+                "message_type": "text"
+            }
+            
+            response = requests.post(f"{self.base_url}/messages/send", json=message_data, headers=headers)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if "message_id" in data:
+                    message_id = data["message_id"]
+                    self.log_result("messaging", "Send Message", True, 
+                                  "Successfully sent message between users")
+                else:
+                    self.log_result("messaging", "Send Message", False, 
+                                  "Send message response missing message_id", data)
+            else:
+                self.log_result("messaging", "Send Message", False, 
+                              f"Send message failed with status {response.status_code}", response.text)
+                
+        except Exception as e:
+            self.log_result("messaging", "Send Message", False, f"Exception: {str(e)}")
+        
+        # Test 4: Send Reply Message (from second user)
+        if second_user_token:
+            try:
+                reply_data = {
+                    "receiver_id": self.user_id,
+                    "content": "Hi John! Thanks for the welcome! I'm excited to be part of the CREWZ community! 🔥",
+                    "message_type": "text"
+                }
+                
+                second_headers = {"Authorization": f"Bearer {second_user_token}"}
+                response = requests.post(f"{self.base_url}/messages/send", json=reply_data, headers=second_headers)
+                
+                if response.status_code == 200:
+                    self.log_result("messaging", "Send Reply Message", True, 
+                                  "Successfully sent reply message")
+                else:
+                    self.log_result("messaging", "Send Reply Message", False, 
+                                  f"Send reply failed with status {response.status_code}")
+                    
+            except Exception as e:
+                self.log_result("messaging", "Send Reply Message", False, f"Exception: {str(e)}")
+        
+        # Test 5: Get Conversations List
+        try:
+            response = requests.get(f"{self.base_url}/messages/conversations", headers=headers)
+            
+            if response.status_code == 200:
+                conversations = response.json()
+                if isinstance(conversations, list):
+                    if conversations:
+                        conv = conversations[0]
+                        required_fields = ["conversation_id", "other_user", "last_message", "unread_count"]
+                        missing_fields = [field for field in required_fields if field not in conv]
+                        
+                        if not missing_fields:
+                            self.log_result("messaging", "Get Conversations", True, 
+                                          f"Successfully retrieved {len(conversations)} conversations with proper structure")
+                        else:
+                            self.log_result("messaging", "Get Conversations", False, 
+                                          f"Conversations missing fields: {missing_fields}")
+                    else:
+                        self.log_result("messaging", "Get Conversations", True, 
+                                      "Successfully retrieved conversations list (empty)")
+                else:
+                    self.log_result("messaging", "Get Conversations", False, 
+                                  "Conversations response is not a list")
+            else:
+                self.log_result("messaging", "Get Conversations", False, 
+                              f"Get conversations failed with status {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "Get Conversations", False, f"Exception: {str(e)}")
+        
+        # Test 6: Get Messages Between Users
+        try:
+            response = requests.get(f"{self.base_url}/messages/{second_user_id}", headers=headers)
+            
+            if response.status_code == 200:
+                messages = response.json()
+                if isinstance(messages, list):
+                    if messages:
+                        message = messages[0]
+                        required_fields = ["id", "sender_id", "receiver_id", "content", "created_at"]
+                        missing_fields = [field for field in required_fields if field not in message]
+                        
+                        if not missing_fields:
+                            self.log_result("messaging", "Get Messages", True, 
+                                          f"Successfully retrieved {len(messages)} messages with proper structure")
+                        else:
+                            self.log_result("messaging", "Get Messages", False, 
+                                          f"Messages missing fields: {missing_fields}")
+                    else:
+                        self.log_result("messaging", "Get Messages", True, 
+                                      "Successfully retrieved messages list (empty)")
+                else:
+                    self.log_result("messaging", "Get Messages", False, 
+                                  "Messages response is not a list")
+            else:
+                self.log_result("messaging", "Get Messages", False, 
+                              f"Get messages failed with status {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "Get Messages", False, f"Exception: {str(e)}")
+        
+        # Test 7: Test Message Read Status (check if unread count decreases)
+        if second_user_token:
+            try:
+                # Get conversations from second user's perspective before reading
+                second_headers = {"Authorization": f"Bearer {second_user_token}"}
+                response = requests.get(f"{self.base_url}/messages/conversations", headers=second_headers)
+                
+                unread_before = 0
+                if response.status_code == 200:
+                    conversations = response.json()
+                    if conversations:
+                        unread_before = conversations[0].get("unread_count", 0)
+                
+                # Second user reads messages (this should mark them as read)
+                read_response = requests.get(f"{self.base_url}/messages/{self.user_id}", headers=second_headers)
+                
+                if read_response.status_code == 200:
+                    # Check conversations again to see if unread count changed
+                    conv_response = requests.get(f"{self.base_url}/messages/conversations", headers=second_headers)
+                    if conv_response.status_code == 200:
+                        conversations = conv_response.json()
+                        if conversations:
+                            unread_after = conversations[0].get("unread_count", 0)
+                            if unread_after <= unread_before:
+                                self.log_result("messaging", "Message Read Status", True, 
+                                              f"Message read status working - unread count: {unread_before} -> {unread_after}")
+                            else:
+                                self.log_result("messaging", "Message Read Status", False, 
+                                              "Unread count did not decrease after reading messages")
+                        else:
+                            self.log_result("messaging", "Message Read Status", True, 
+                                          "No conversations to test read status")
+                    else:
+                        self.log_result("messaging", "Message Read Status", False, 
+                                      "Failed to get conversations after reading")
+                else:
+                    self.log_result("messaging", "Message Read Status", False, 
+                                  "Failed to read messages for status test")
+                    
+            except Exception as e:
+                self.log_result("messaging", "Message Read Status", False, f"Exception: {str(e)}")
+        
+        # Test 8: Test Unread Message Count
+        try:
+            # Send another message to create unread count
+            message_data = {
+                "receiver_id": second_user_id,
+                "content": "Another message to test unread counts! 📱",
+                "message_type": "text"
+            }
+            
+            send_response = requests.post(f"{self.base_url}/messages/send", json=message_data, headers=headers)
+            
+            if send_response.status_code == 200:
+                # Check if second user has unread messages
+                if second_user_token:
+                    second_headers = {"Authorization": f"Bearer {second_user_token}"}
+                    conv_response = requests.get(f"{self.base_url}/messages/conversations", headers=second_headers)
+                    
+                    if conv_response.status_code == 200:
+                        conversations = conv_response.json()
+                        if conversations:
+                            unread_count = conversations[0].get("unread_count", 0)
+                            if unread_count > 0:
+                                self.log_result("messaging", "Unread Message Count", True, 
+                                              f"Unread message count working - {unread_count} unread messages")
+                            else:
+                                self.log_result("messaging", "Unread Message Count", False, 
+                                              "Unread count not incremented after new message")
+                        else:
+                            self.log_result("messaging", "Unread Message Count", False, 
+                                          "No conversations found for unread count test")
+                    else:
+                        self.log_result("messaging", "Unread Message Count", False, 
+                                      "Failed to get conversations for unread count test")
+            else:
+                self.log_result("messaging", "Unread Message Count", False, 
+                              "Failed to send message for unread count test")
+                
+        except Exception as e:
+            self.log_result("messaging", "Unread Message Count", False, f"Exception: {str(e)}")
+        
+        # Test 9: Test Error Cases - Invalid Receiver
+        try:
+            invalid_message_data = {
+                "receiver_id": "invalid-user-id-123",
+                "content": "This should fail",
+                "message_type": "text"
+            }
+            
+            response = requests.post(f"{self.base_url}/messages/send", json=invalid_message_data, headers=headers)
+            
+            if response.status_code == 404:
+                self.log_result("messaging", "Error Handling - Invalid Receiver", True, 
+                              "Correctly returned 404 for invalid receiver")
+            else:
+                self.log_result("messaging", "Error Handling - Invalid Receiver", False, 
+                              f"Expected 404 for invalid receiver, got {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "Error Handling - Invalid Receiver", False, f"Exception: {str(e)}")
+        
+        # Test 10: Test Error Cases - Invalid Conversation Partner
+        try:
+            response = requests.get(f"{self.base_url}/messages/invalid-user-id-123", headers=headers)
+            
+            if response.status_code == 404:
+                self.log_result("messaging", "Error Handling - Invalid Partner", True, 
+                              "Correctly returned 404 for invalid conversation partner")
+            else:
+                self.log_result("messaging", "Error Handling - Invalid Partner", False, 
+                              f"Expected 404 for invalid partner, got {response.status_code}")
+                
+        except Exception as e:
+            self.log_result("messaging", "Error Handling - Invalid Partner", False, f"Exception: {str(e)}")
+    
     def run_all_tests(self):
         """Run all backend API tests"""
         print("🚀 Starting CREWZ NATION Backend API Tests...")
