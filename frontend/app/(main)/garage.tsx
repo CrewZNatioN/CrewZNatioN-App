@@ -47,6 +47,7 @@ export default function GarageScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [username, setUsername] = useState<string>('');
+  const [showGarageTools, setShowGarageTools] = useState(false);
 
   const fetchUserData = async () => {
     try {
@@ -322,7 +323,12 @@ export default function GarageScreen() {
         style={styles.garageHeader}
       >
         <View style={styles.garageTools}>
-          <Ionicons name="build" size={24} color="#FFD700" />
+          <TouchableOpacity 
+            style={[styles.toolButton, showGarageTools && styles.activeToolButton]}
+            onPress={() => setShowGarageTools(!showGarageTools)}
+          >
+            <Ionicons name="build" size={24} color={showGarageTools ? "#000000" : "#FFD700"} />
+          </TouchableOpacity>
           <Text style={styles.garageTitle}>MY GARAGE</Text>
           <TouchableOpacity 
             style={styles.addVehicleIcon}
@@ -336,6 +342,28 @@ export default function GarageScreen() {
         <View style={styles.usernameSection}>
           <Text style={styles.usernameText}>{username ? `@${username}` : "@username"}</Text>
         </View>
+        
+        {/* Garage Tools Panel */}
+        {showGarageTools && (
+          <View style={styles.garageToolsPanel}>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="settings-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Garage Settings</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="analytics-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Vehicle Stats</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="share-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Share Garage</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.toolOption}>
+              <Ionicons name="download-outline" size={20} color="#FFD700" />
+              <Text style={styles.toolOptionText}>Export List</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </LinearGradient>
 
       {userVehicles.length === 0 ? (
@@ -955,4 +983,36 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 215, 0, 0.2)',
     borderRadius: 16,
     padding: 6,
-  },});
+  },
+  // New garage tools styles
+  toolButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderRadius: 16,
+    padding: 6,
+  },
+  activeToolButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.9)',
+  },
+  garageToolsPanel: {
+    backgroundColor: 'rgba(30, 30, 30, 0.95)',
+    borderRadius: 12,
+    padding: 16,
+    marginTop: 12,
+    marginHorizontal: 20,
+    borderWidth: 1,
+    borderColor: '#333333',
+  },
+  toolOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+  },
+  toolOptionText: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    marginLeft: 12,
+    fontWeight: '500',
+  },
+});
