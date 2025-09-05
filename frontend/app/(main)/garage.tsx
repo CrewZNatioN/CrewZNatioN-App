@@ -47,7 +47,6 @@ export default function GarageScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [username, setUsername] = useState<string>('');
-  const [showGarageTools, setShowGarageTools] = useState(false);
 
   const fetchUserData = async () => {
     try {
@@ -323,47 +322,13 @@ export default function GarageScreen() {
         style={styles.garageHeader}
       >
         <View style={styles.garageTools}>
-          <TouchableOpacity 
-            style={[styles.toolButton, showGarageTools && styles.activeToolButton]}
-            onPress={() => setShowGarageTools(!showGarageTools)}
-          >
-            <Ionicons name="build" size={24} color={showGarageTools ? "#000000" : "#FFD700"} />
-          </TouchableOpacity>
           <Text style={styles.garageTitle}>MY GARAGE</Text>
-          <TouchableOpacity 
-            style={styles.addVehicleIcon}
-            onPress={() => setShowAddModal(true)}
-          >
-            <Ionicons name="car-sport" size={24} color="#FFD700" />
-          </TouchableOpacity>
         </View>
         
         {/* Username centered under garage title */}
         <View style={styles.usernameSection}>
           <Text style={styles.usernameText}>{username ? `@${username}` : "@username"}</Text>
         </View>
-        
-        {/* Garage Tools Panel */}
-        {showGarageTools && (
-          <View style={styles.garageToolsPanel}>
-            <TouchableOpacity style={styles.toolOption}>
-              <Ionicons name="settings-outline" size={20} color="#FFD700" />
-              <Text style={styles.toolOptionText}>Garage Settings</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolOption}>
-              <Ionicons name="analytics-outline" size={20} color="#FFD700" />
-              <Text style={styles.toolOptionText}>Vehicle Stats</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolOption}>
-              <Ionicons name="share-outline" size={20} color="#FFD700" />
-              <Text style={styles.toolOptionText}>Share Garage</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.toolOption}>
-              <Ionicons name="download-outline" size={20} color="#FFD700" />
-              <Text style={styles.toolOptionText}>Export List</Text>
-            </TouchableOpacity>
-          </View>
-        )}
       </LinearGradient>
 
       {userVehicles.length === 0 ? (
@@ -392,7 +357,7 @@ export default function GarageScreen() {
               style={styles.addFirstVehicleGradient}
             >
               <Ionicons name="add-circle" size={24} color="#000000" />
-              <Text style={styles.addFirstVehicleText}>Add Your First Ride</Text>
+              <Text style={styles.addFirstVehicleText}>Add Your Ride</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
