@@ -178,7 +178,7 @@ export default function FeedScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>CREWZ NATION</Text>
+        <View style={styles.headerLeft} />
         <TouchableOpacity>
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
         </TouchableOpacity>
