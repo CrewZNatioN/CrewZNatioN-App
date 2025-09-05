@@ -1319,4 +1319,42 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginTop: 4,
   },
+  // Multiple photos support styles
+  photoCounter: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  photoCountText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginLeft: 2,
+  },
+  captionPreview: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  captionPreviewText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+  },
+  placeholderText: {
+    fontSize: 12,
+    color: '#FFD700',
+    marginTop: 4,
+    fontWeight: '500',
+  },
 });
