@@ -659,7 +659,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     fontSize: 16,
     color: '#FFFFFF',
-    marginRight: 12,
+    
   },
   cancelSearchButton: {
     paddingHorizontal: 12,
