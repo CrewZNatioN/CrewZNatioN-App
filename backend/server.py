@@ -53,19 +53,55 @@ class User(BaseModel):
     session_token: Optional[str] = None
 
 class PostCreate(BaseModel):
-    image: str  # base64 encoded
-    caption: str
+    image: Optional[str] = None  # base64 encoded
+    video: Optional[str] = None  # video file path or data
+    caption: Optional[str] = ""
     tagged_users: Optional[List[str]] = []
+    type: Optional[str] = "post"  # post, story, reel
 
 class Post(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     user_id: str
-    image: str
-    caption: str
+    image: Optional[str] = None
+    video: Optional[str] = None
+    caption: str = ""
     likes: int = 0
     comments: int = 0
     tagged_users: List[str] = []
+    type: str = "post"  # post, story, reel
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: Optional[datetime] = None  # for stories
+
+class Story(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    image: Optional[str] = None
+    video: Optional[str] = None
+    duration: int = 5  # seconds
+    views: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: datetime = Field(default_factory=lambda: datetime.utcnow() + timedelta(hours=24))
+
+class Reel(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    video: str
+    caption: str = ""
+    likes: int = 0
+    comments: int = 0
+    views: int = 0
+    tagged_users: List[str] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class LiveStream(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    title: str
+    description: str = ""
+    is_active: bool = True
+    viewers: int = 0
+    started_at: datetime = Field(default_factory=datetime.utcnow)
+    ended_at: Optional[datetime] = None
 
 class Vehicle(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
