@@ -311,25 +311,15 @@ export default function GarageScreen() {
           </TouchableOpacity>
         </View>
         
-        {/* Garage Stats */}
+        {/* User Info & Vehicle Count */}
         <View style={styles.garageStats}>
+          <View style={styles.userSection}>
+            <Text style={styles.usernameText}>@username</Text>
+          </View>
+          <View style={styles.statDivider} />
           <View style={styles.statItem}>
             <Text style={styles.statNumber}>{userVehicles.length}</Text>
             <Text style={styles.statLabel}>VEHICLES</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>
-              {userVehicles.reduce((total, v) => total + (v.horsepower || 0), 0)}
-            </Text>
-            <Text style={styles.statLabel}>TOTAL HP</Text>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statItem}>
-            <Text style={styles.statNumber}>
-              {new Set(userVehicles.map(v => v.make)).size}
-            </Text>
-            <Text style={styles.statLabel}>BRANDS</Text>
           </View>
         </View>
       </LinearGradient>
