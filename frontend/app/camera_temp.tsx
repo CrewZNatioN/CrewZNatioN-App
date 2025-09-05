@@ -332,6 +332,40 @@ export default function CameraScreen() {
             </ScrollView>
           </View>
 
+          {/* Filter Selection */}
+          {showFilters && (
+            <View style={styles.filterSelector}>
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filterScrollContent}
+              >
+                {filters.map((filter) => (
+                  <TouchableOpacity
+                    key={filter.name}
+                    style={[
+                      styles.filterButton,
+                      selectedFilter === filter.name && styles.activeFilterButton
+                    ]}
+                    onPress={() => setSelectedFilter(filter.name)}
+                  >
+                    <Ionicons 
+                      name={filter.icon as any} 
+                      size={20} 
+                      color={selectedFilter === filter.name ? "#000000" : "#FFFFFF"} 
+                    />
+                    <Text style={[
+                      styles.filterText,
+                      selectedFilter === filter.name && styles.activeFilterText
+                    ]}>
+                      {filter.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
           {/* Bottom Controls */}
           <View style={styles.bottomControls}>
             {/* Gallery Preview */}
