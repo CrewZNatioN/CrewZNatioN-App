@@ -118,9 +118,9 @@ export default function GarageScreen() {
           );
         }
 
-        // Update the vehicle with the photo/video
+        // Update the vehicle with the photo/video - ADD to existing media
         if (selectedGarageVehicle && (asset.base64 || manipulatedImage?.base64)) {
-          await updateVehiclePhoto(
+          await addVehiclePhoto(
             selectedGarageVehicle.id, 
             manipulatedImage?.base64 || asset.base64,
             asset.type,
