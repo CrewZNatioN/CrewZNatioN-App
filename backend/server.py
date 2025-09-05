@@ -125,7 +125,9 @@ class Event(BaseModel):
     location: str
     organizer_id: str
     attendees: List[str] = []
+    invited_users: List[str] = []  # for private events
     image: Optional[str] = None
+    is_private: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 # Helper functions
