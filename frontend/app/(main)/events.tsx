@@ -217,16 +217,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  createButton: {
-    backgroundColor: '#FFD700',
-    borderRadius: 20,
-    padding: 8,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
