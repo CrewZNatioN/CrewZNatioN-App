@@ -415,6 +415,13 @@ export default function CameraScreen() {
 
             {/* Mode Specific Actions */}
             <View style={styles.rightControls}>
+              <TouchableOpacity 
+                style={[styles.rightButton, showFilters && styles.activeRightButton]}
+                onPress={() => setShowFilters(!showFilters)}
+              >
+                <Ionicons name="color-filter" size={24} color={showFilters ? "#000000" : "#FFFFFF"} />
+              </TouchableOpacity>
+              
               {selectedMode === 'post' && (
                 <TouchableOpacity style={styles.rightButton}>
                   <Ionicons name="car-sport" size={24} color="#FFFFFF" />
