@@ -642,35 +642,129 @@ async def initialize_vehicles():
         {"make": "Audi", "model": "RS6 Avant", "year": 2023, "type": "wagon", "horsepower": 591, "engine": "4.0L Twin-Turbo V8"},
         {"make": "Audi", "model": "R8 V10", "year": 2023, "type": "coupe", "horsepower": 562, "engine": "5.2L V10"},
         
-        # Motorcycles - Yamaha
+        # ========== MOTORCYCLES - COMPREHENSIVE DATABASE ==========
+        
+        # Yamaha (Multiple Years)
         {"make": "Yamaha", "model": "YZF-R1", "year": 2023, "type": "motorcycle", "horsepower": 200, "engine": "998cc Inline-4"},
+        {"make": "Yamaha", "model": "YZF-R1", "year": 2022, "type": "motorcycle", "horsepower": 200, "engine": "998cc Inline-4"},
+        {"make": "Yamaha", "model": "YZF-R1", "year": 2021, "type": "motorcycle", "horsepower": 200, "engine": "998cc Inline-4"},
         {"make": "Yamaha", "model": "MT-09", "year": 2023, "type": "motorcycle", "horsepower": 119, "engine": "847cc Triple"},
+        {"make": "Yamaha", "model": "MT-09", "year": 2022, "type": "motorcycle", "horsepower": 119, "engine": "847cc Triple"},
         {"make": "Yamaha", "model": "R6", "year": 2023, "type": "motorcycle", "horsepower": 118, "engine": "599cc Inline-4"},
+        {"make": "Yamaha", "model": "R6", "year": 2022, "type": "motorcycle", "horsepower": 118, "engine": "599cc Inline-4"},
+        {"make": "Yamaha", "model": "MT-07", "year": 2023, "type": "motorcycle", "horsepower": 75, "engine": "689cc Twin"},
+        {"make": "Yamaha", "model": "XSR900", "year": 2023, "type": "motorcycle", "horsepower": 119, "engine": "847cc Triple"},
+        {"make": "Yamaha", "model": "Tracer 9", "year": 2023, "type": "motorcycle", "horsepower": 119, "engine": "847cc Triple"},
         
-        # Motorcycles - Honda
+        # Honda (Multiple Years & Models)
         {"make": "Honda", "model": "CBR1000RR-R", "year": 2023, "type": "motorcycle", "horsepower": 217, "engine": "999cc Inline-4"},
+        {"make": "Honda", "model": "CBR1000RR-R", "year": 2022, "type": "motorcycle", "horsepower": 217, "engine": "999cc Inline-4"},
+        {"make": "Honda", "model": "CBR1000RR-R", "year": 2021, "type": "motorcycle", "horsepower": 217, "engine": "999cc Inline-4"},
         {"make": "Honda", "model": "CB650R", "year": 2023, "type": "motorcycle", "horsepower": 94, "engine": "649cc Inline-4"},
+        {"make": "Honda", "model": "CB650R", "year": 2022, "type": "motorcycle", "horsepower": 94, "engine": "649cc Inline-4"},
         {"make": "Honda", "model": "Gold Wing", "year": 2023, "type": "motorcycle", "horsepower": 126, "engine": "1833cc Flat-6"},
+        {"make": "Honda", "model": "CBR600RR", "year": 2023, "type": "motorcycle", "horsepower": 118, "engine": "599cc Inline-4"},
+        {"make": "Honda", "model": "CB300R", "year": 2023, "type": "motorcycle", "horsepower": 31, "engine": "286cc Single"},
+        {"make": "Honda", "model": "Africa Twin", "year": 2023, "type": "motorcycle", "horsepower": 101, "engine": "1084cc Twin"},
+        {"make": "Honda", "model": "Rebel 1100", "year": 2023, "type": "motorcycle", "horsepower": 87, "engine": "1084cc Twin"},
         
-        # Motorcycles - Kawasaki
+        # Kawasaki (Comprehensive Range)
         {"make": "Kawasaki", "model": "Ninja ZX-10R", "year": 2023, "type": "motorcycle", "horsepower": 203, "engine": "998cc Inline-4"},
+        {"make": "Kawasaki", "model": "Ninja ZX-10R", "year": 2022, "type": "motorcycle", "horsepower": 203, "engine": "998cc Inline-4"},
+        {"make": "Kawasaki", "model": "Ninja ZX-10R", "year": 2021, "type": "motorcycle", "horsepower": 203, "engine": "998cc Inline-4"},
         {"make": "Kawasaki", "model": "Z900", "year": 2023, "type": "motorcycle", "horsepower": 125, "engine": "948cc Inline-4"},
+        {"make": "Kawasaki", "model": "Z900", "year": 2022, "type": "motorcycle", "horsepower": 125, "engine": "948cc Inline-4"},
         {"make": "Kawasaki", "model": "Ninja 400", "year": 2023, "type": "motorcycle", "horsepower": 45, "engine": "399cc Twin"},
+        {"make": "Kawasaki", "model": "Ninja ZX-6R", "year": 2023, "type": "motorcycle", "horsepower": 130, "engine": "636cc Inline-4"},
+        {"make": "Kawasaki", "model": "Z650", "year": 2023, "type": "motorcycle", "horsepower": 68, "engine": "649cc Twin"},
+        {"make": "Kawasaki", "model": "Versys 650", "year": 2023, "type": "motorcycle", "horsepower": 69, "engine": "649cc Twin"},
+        {"make": "Kawasaki", "model": "ZX-14R", "year": 2023, "type": "motorcycle", "horsepower": 208, "engine": "1441cc Inline-4"},
         
-        # Motorcycles - Suzuki
+        # Suzuki (Full Range)
         {"make": "Suzuki", "model": "GSX-R1000R", "year": 2023, "type": "motorcycle", "horsepower": 202, "engine": "999cc Inline-4"},
+        {"make": "Suzuki", "model": "GSX-R1000R", "year": 2022, "type": "motorcycle", "horsepower": 202, "engine": "999cc Inline-4"},
+        {"make": "Suzuki", "model": "GSX-R1000R", "year": 2021, "type": "motorcycle", "horsepower": 202, "engine": "999cc Inline-4"},
         {"make": "Suzuki", "model": "SV650", "year": 2023, "type": "motorcycle", "horsepower": 76, "engine": "645cc V-Twin"},
+        {"make": "Suzuki", "model": "SV650", "year": 2022, "type": "motorcycle", "horsepower": 76, "engine": "645cc V-Twin"},
         {"make": "Suzuki", "model": "Hayabusa", "year": 2023, "type": "motorcycle", "horsepower": 190, "engine": "1340cc Inline-4"},
+        {"make": "Suzuki", "model": "Hayabusa", "year": 2022, "type": "motorcycle", "horsepower": 190, "engine": "1340cc Inline-4"},
+        {"make": "Suzuki", "model": "GSX-R750", "year": 2023, "type": "motorcycle", "horsepower": 148, "engine": "749cc Inline-4"},
+        {"make": "Suzuki", "model": "GSX-R600", "year": 2023, "type": "motorcycle", "horsepower": 126, "engine": "599cc Inline-4"},
+        {"make": "Suzuki", "model": "V-Strom 1050", "year": 2023, "type": "motorcycle", "horsepower": 107, "engine": "1037cc V-Twin"},
         
-        # Motorcycles - Ducati
+        # Ducati (Premium Italian)
         {"make": "Ducati", "model": "Panigale V4", "year": 2023, "type": "motorcycle", "horsepower": 214, "engine": "1103cc V4"},
+        {"make": "Ducati", "model": "Panigale V4", "year": 2022, "type": "motorcycle", "horsepower": 214, "engine": "1103cc V4"},
+        {"make": "Ducati", "model": "Panigale V4", "year": 2021, "type": "motorcycle", "horsepower": 214, "engine": "1103cc V4"},
         {"make": "Ducati", "model": "Monster 937", "year": 2023, "type": "motorcycle", "horsepower": 111, "engine": "937cc L-Twin"},
+        {"make": "Ducati", "model": "Monster 937", "year": 2022, "type": "motorcycle", "horsepower": 111, "engine": "937cc L-Twin"},
         {"make": "Ducati", "model": "Multistrada V4", "year": 2023, "type": "motorcycle", "horsepower": 170, "engine": "1158cc V4"},
+        {"make": "Ducati", "model": "Streetfighter V4", "year": 2023, "type": "motorcycle", "horsepower": 208, "engine": "1103cc V4"},
+        {"make": "Ducati", "model": "Supersport 950", "year": 2023, "type": "motorcycle", "horsepower": 110, "engine": "937cc L-Twin"},
+        {"make": "Ducati", "model": "Diavel 1260", "year": 2023, "type": "motorcycle", "horsepower": 159, "engine": "1262cc L-Twin"},
+        {"make": "Ducati", "model": "Scrambler Icon", "year": 2023, "type": "motorcycle", "horsepower": 73, "engine": "803cc L-Twin"},
         
-        # Motorcycles - Harley-Davidson
+        # Harley-Davidson (American Classic)
         {"make": "Harley-Davidson", "model": "Road Glide", "year": 2023, "type": "motorcycle", "horsepower": 90, "engine": "1868cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Road Glide", "year": 2022, "type": "motorcycle", "horsepower": 90, "engine": "1868cc V-Twin"},
         {"make": "Harley-Davidson", "model": "Sportster S", "year": 2023, "type": "motorcycle", "horsepower": 121, "engine": "1252cc V-Twin"},
         {"make": "Harley-Davidson", "model": "Fat Boy", "year": 2023, "type": "motorcycle", "horsepower": 86, "engine": "1868cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Street Glide", "year": 2023, "type": "motorcycle", "horsepower": 90, "engine": "1868cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Iron 883", "year": 2023, "type": "motorcycle", "horsepower": 50, "engine": "883cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Road King", "year": 2023, "type": "motorcycle", "horsepower": 90, "engine": "1868cc V-Twin"},
+        {"make": "Harley-Davidson", "model": "Low Rider S", "year": 2023, "type": "motorcycle", "horsepower": 114, "engine": "1868cc V-Twin"},
+        
+        # BMW Motorrad (German Engineering)
+        {"make": "BMW", "model": "S1000RR", "year": 2023, "type": "motorcycle", "horsepower": 205, "engine": "999cc Inline-4"},
+        {"make": "BMW", "model": "S1000RR", "year": 2022, "type": "motorcycle", "horsepower": 205, "engine": "999cc Inline-4"},
+        {"make": "BMW", "model": "S1000RR", "year": 2021, "type": "motorcycle", "horsepower": 205, "engine": "999cc Inline-4"},
+        {"make": "BMW", "model": "R1250GS", "year": 2023, "type": "motorcycle", "horsepower": 136, "engine": "1254cc Boxer"},
+        {"make": "BMW", "model": "R1250GS", "year": 2022, "type": "motorcycle", "horsepower": 136, "engine": "1254cc Boxer"},
+        {"make": "BMW", "model": "F900R", "year": 2023, "type": "motorcycle", "horsepower": 105, "engine": "895cc Twin"},
+        {"make": "BMW", "model": "S1000XR", "year": 2023, "type": "motorcycle", "horsepower": 165, "engine": "999cc Inline-4"},
+        {"make": "BMW", "model": "R nineT", "year": 2023, "type": "motorcycle", "horsepower": 109, "engine": "1170cc Boxer"},
+        
+        # KTM (Austrian Performance)
+        {"make": "KTM", "model": "1290 Super Duke R", "year": 2023, "type": "motorcycle", "horsepower": 180, "engine": "1301cc V-Twin"},
+        {"make": "KTM", "model": "1290 Super Duke R", "year": 2022, "type": "motorcycle", "horsepower": 180, "engine": "1301cc V-Twin"},
+        {"make": "KTM", "model": "RC 390", "year": 2023, "type": "motorcycle", "horsepower": 44, "engine": "373cc Single"},
+        {"make": "KTM", "model": "Duke 390", "year": 2023, "type": "motorcycle", "horsepower": 44, "engine": "373cc Single"},
+        {"make": "KTM", "model": "890 Duke R", "year": 2023, "type": "motorcycle", "horsepower": 121, "engine": "889cc Twin"},
+        {"make": "KTM", "model": "1290 Adventure", "year": 2023, "type": "motorcycle", "horsepower": 160, "engine": "1301cc V-Twin"},
+        
+        # Aprilia (Italian Sport)
+        {"make": "Aprilia", "model": "RSV4 1100", "year": 2023, "type": "motorcycle", "horsepower": 217, "engine": "1077cc V4"},
+        {"make": "Aprilia", "model": "RSV4 1100", "year": 2022, "type": "motorcycle", "horsepower": 217, "engine": "1077cc V4"},
+        {"make": "Aprilia", "model": "Tuono V4 1100", "year": 2023, "type": "motorcycle", "horsepower": 175, "engine": "1077cc V4"},
+        {"make": "Aprilia", "model": "RS 660", "year": 2023, "type": "motorcycle", "horsepower": 100, "engine": "659cc Twin"},
+        {"make": "Aprilia", "model": "Tuono 660", "year": 2023, "type": "motorcycle", "horsepower": 95, "engine": "659cc Twin"},
+        
+        # Triumph (British Heritage)
+        {"make": "Triumph", "model": "Speed Triple 1200 RS", "year": 2023, "type": "motorcycle", "horsepower": 180, "engine": "1160cc Triple"},
+        {"make": "Triumph", "model": "Speed Triple 1200 RS", "year": 2022, "type": "motorcycle", "horsepower": 180, "engine": "1160cc Triple"},
+        {"make": "Triumph", "model": "Street Triple RS", "year": 2023, "type": "motorcycle", "horsepower": 123, "engine": "765cc Triple"},
+        {"make": "Triumph", "model": "Bonneville T120", "year": 2023, "type": "motorcycle", "horsepower": 80, "engine": "1200cc Twin"},
+        {"make": "Triumph", "model": "Tiger 900", "year": 2023, "type": "motorcycle", "horsepower": 95, "engine": "888cc Triple"},
+        {"make": "Triumph", "model": "Rocket 3", "year": 2023, "type": "motorcycle", "horsepower": 165, "engine": "2458cc Triple"},
+        
+        # MV Agusta (Italian Exotic)
+        {"make": "MV Agusta", "model": "F4", "year": 2023, "type": "motorcycle", "horsepower": 212, "engine": "998cc Inline-4"},
+        {"make": "MV Agusta", "model": "Brutale 1000 RR", "year": 2023, "type": "motorcycle", "horsepower": 208, "engine": "998cc Inline-4"},
+        {"make": "MV Agusta", "model": "Dragster 800", "year": 2023, "type": "motorcycle", "horsepower": 140, "engine": "798cc Triple"},
+        
+        # Indian Motorcycle (American Heritage)
+        {"make": "Indian", "model": "FTR 1200", "year": 2023, "type": "motorcycle", "horsepower": 120, "engine": "1203cc V-Twin"},
+        {"make": "Indian", "model": "Scout", "year": 2023, "type": "motorcycle", "horsepower": 100, "engine": "1133cc V-Twin"},
+        {"make": "Indian", "model": "Chieftain", "year": 2023, "type": "motorcycle", "horsepower": 108, "engine": "1811cc V-Twin"},
+        {"make": "Indian", "model": "Challenger", "year": 2023, "type": "motorcycle", "horsepower": 122, "engine": "1768cc V-Twin"},
+        
+        # Vintage/Classic Models (Multiple Years)
+        {"make": "Honda", "model": "CBR900RR", "year": 1995, "type": "motorcycle", "horsepower": 130, "engine": "893cc Inline-4"},
+        {"make": "Yamaha", "model": "R1", "year": 2004, "type": "motorcycle", "horsepower": 172, "engine": "998cc Inline-4"},
+        {"make": "Suzuki", "model": "GSX-R1000", "year": 2005, "type": "motorcycle", "horsepower": 166, "engine": "999cc Inline-4"},
+        {"make": "Kawasaki", "model": "ZX-6R", "year": 2009, "type": "motorcycle", "horsepower": 130, "engine": "599cc Inline-4"},
+        {"make": "Ducati", "model": "916", "year": 1994, "type": "motorcycle", "horsepower": 114, "engine": "916cc L-Twin"},
+        {"make": "Honda", "model": "CBR600F4i", "year": 2001, "type": "motorcycle", "horsepower": 110, "engine": "599cc Inline-4"},
     ]
     
     # Add vehicle objects with proper structure
