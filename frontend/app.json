@@ -10,7 +10,12 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.crewznation.app"
+      "bundleIdentifier": "com.crewznation.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "CREWZ NATION needs camera access to let you share photos of your vehicles.",
+        "NSPhotoLibraryUsageDescription": "CREWZ NATION needs photo library access to let you select photos to share.",
+        "NSLocationWhenInUseUsageDescription": "CREWZ NATION uses location to help you find nearby car meets and events."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -18,7 +23,14 @@
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.crewznation.app"
+      "package": "com.crewznation.app",
+      "permissions": [
+        "CAMERA",
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -34,6 +46,18 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#000000"
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow CREWZ NATION to access your camera to take photos of your vehicles."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow CREWZ NATION to access your photo library to share vehicle photos."
         }
       ]
     ],
