@@ -295,37 +295,87 @@ export default function CameraScreen() {
           <Text style={styles.characterCount}>{caption.length}/500</Text>
         </View>
 
-        {/* Vehicle Selection */}
-        <View style={styles.vehicleSection}>
-          <Text style={styles.sectionTitle}>Tag Your Vehicle (Optional)</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            <TouchableOpacity 
-              style={[
-                styles.vehicleCard,
-                selectedVehicle === null && styles.vehicleCardSelected
-              ]}
-              onPress={() => setSelectedVehicle(null)}
-            >
-              <Text style={styles.vehicleCardText}>No Vehicle</Text>
-            </TouchableOpacity>
-            {vehicles.map((vehicle) => (
-              <TouchableOpacity
-                key={vehicle.id}
-                style={[
-                  styles.vehicleCard,
-                  selectedVehicle === vehicle.id && styles.vehicleCardSelected
-                ]}
-                onPress={() => setSelectedVehicle(vehicle.id)}
-              >
-                <Text style={styles.vehicleCardBrand}>
-                  {vehicle.make}
-                </Text>
-                <Text style={styles.vehicleCardModel}>
-                  {vehicle.model} {vehicle.year}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+        {/* User Tagging Section */}
+        <View style={styles.userTagSection}>
+          <Text style={styles.sectionTitle}>Tag People</Text>
+          
+          {/* Tagged Users Display */}
+          {taggedUsers.length > 0 && (
+            <View style={styles.taggedUsersContainer}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {taggedUsers.map((userId, index) => {
+                  const user = users.find(u => u.id === userId);
+                  return (
+                    <View key={userId} style={styles.taggedUserChip}>
+                      <Text style={styles.taggedUserText}>@{user?.username || 'Unknown'}</Text>
+                      <TouchableOpacity 
+                        onPress={() => setTaggedUsers(prev => prev.filter(id => id !== userId))}
+                        style={styles.removeTagButton}
+                      >
+                        <Ionicons name="close" size={16} color="#FFFFFF" />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+          )}
+          
+          {/* Add User Button */}
+          <TouchableOpacity 
+            style={styles.addUserButton}
+            onPress={() => setShowUserSearch(true)}
+          >
+            <Ionicons name="person-add" size={20} color="#FFD700" />
+            <Text style={styles.addUserButtonText}>Tag Friends</Text>
+          </TouchableOpacity>
+          
+          {/* User Search Modal */}
+          {showUserSearch && (
+            <View style={styles.userSearchContainer}>
+              <View style={styles.userSearchHeader}>
+                <TextInput
+                  style={styles.userSearchInput}
+                  placeholder="Search users..."
+                  placeholderTextColor="#666666"
+                  value={userSearchQuery}
+                  onChangeText={setUserSearchQuery}
+                />
+                <TouchableOpacity 
+                  onPress={() => setShowUserSearch(false)}
+                  style={styles.cancelSearchButton}
+                >
+                  <Text style={styles.cancelSearchText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+              
+              <FlatList
+                data={users.filter(user => 
+                  user.username.toLowerCase().includes(userSearchQuery.toLowerCase()) &&
+                  !taggedUsers.includes(user.id)
+                )}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity 
+                    style={styles.userSearchItem}
+                    onPress={() => {
+                      setTaggedUsers(prev => [...prev, item.id]);
+                      setUserSearchQuery('');
+                      setShowUserSearch(false);
+                    }}
+                  >
+                    <Ionicons name="person-circle" size={40} color="#FFD700" />
+                    <View style={styles.userSearchInfo}>
+                      <Text style={styles.userSearchUsername}>@{item.username}</Text>
+                      <Text style={styles.userSearchEmail}>{item.email}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+                style={styles.userSearchList}
+                maxHeight={200}
+              />
+            </View>
+          )}
         </View>
 
         {/* Upload Button */}
