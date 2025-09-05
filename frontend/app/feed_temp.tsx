@@ -348,6 +348,11 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 8,
   },
+  notificationButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 8,
+  },
   // Notification styles
   notificationButton: {
     position: 'relative',
