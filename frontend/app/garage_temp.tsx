@@ -123,7 +123,7 @@ export default function GarageScreen() {
     }
   };
 
-  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string) => {
+  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
@@ -135,6 +135,7 @@ export default function GarageScreen() {
         body: JSON.stringify({
           image: mediaBase64,
           media_type: mediaType,
+          caption: caption,
         }),
       });
 
@@ -142,6 +143,7 @@ export default function GarageScreen() {
         // Refresh garage to show updated photo
         fetchUserGarage();
         setShowPhotoModal(false);
+        setPhotoCaption(''); // Reset caption
         Alert.alert('Success', 'Photo updated successfully!');
       } else {
         Alert.alert('Error', 'Failed to update photo');
@@ -154,6 +156,7 @@ export default function GarageScreen() {
 
   const openPhotoModal = (vehicle: UserGarageVehicle) => {
     setSelectedGarageVehicle(vehicle);
+    setPhotoCaption(''); // Reset caption when opening modal
     setShowPhotoModal(true);
   };
 
