@@ -131,27 +131,48 @@ export default function LoginScreen() {
           {/* Logo Section */}
           <View style={styles.logoSection}>
             <View style={styles.logoContainer}>
-              {/* CREWZ NATION Logo - matching the SVG */}
+              {/* CREWZ NATION Logo - matching the SVG exactly */}
               <View style={styles.crewzNationContainer}>
-                <View style={styles.logoSymbolsContainer}>
-                  {/* Left Logo Symbol */}
-                  <View style={styles.leftLogoSymbol}>
-                    <View style={styles.symbolCircle}>
-                      <View style={styles.symbolInnerCircle} />
-                      <View style={styles.symbolTriangle} />
+                {/* Main Logo Row */}
+                <View style={styles.mainLogoRow}>
+                  {/* Left Symbol */}
+                  <View style={styles.leftSymbol}>
+                    <View style={styles.outerCircle}>
+                      <View style={styles.innerElements}>
+                        <View style={styles.centerDot} />
+                        <View style={styles.triangularElements}>
+                          <View style={styles.triangle1} />
+                          <View style={styles.triangle2} />
+                          <View style={styles.triangle3} />
+                        </View>
+                      </View>
                     </View>
                   </View>
                   
                   {/* CREWZ Text */}
-                  <View style={styles.crewzTextContainer}>
-                    <Text style={styles.crewzText}>CREWZ</Text>
+                  <View style={styles.crewzContainer}>
+                    <Text style={styles.crewzMainText}>CREWZ</Text>
+                  </View>
+                  
+                  {/* Right Symbol */}
+                  <View style={styles.rightSymbol}>
+                    <View style={styles.outerCircle}>
+                      <View style={styles.innerElements}>
+                        <View style={styles.centerDot} />
+                        <View style={styles.triangularElements}>
+                          <View style={styles.triangle1} />
+                          <View style={styles.triangle2} />
+                          <View style={styles.triangle3} />
+                        </View>
+                      </View>
+                    </View>
                   </View>
                 </View>
                 
                 {/* NATION Text */}
-                <View style={styles.nationContainer}>
-                  <Text style={styles.nationText}>
-                    NATI<Text style={styles.nationOText}>O</Text>N
+                <View style={styles.nationRow}>
+                  <Text style={styles.nationMainText}>
+                    NATI<Text style={styles.nationHighlight}>O</Text>N
                   </Text>
                 </View>
               </View>
