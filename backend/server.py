@@ -302,7 +302,7 @@ async def get_vehicles(make: Optional[str] = None, year: Optional[int] = None):
 
 @api_router.get("/vehicles/{vehicle_id}")
 async def get_vehicle(vehicle_id: str):
-    vehicle = await db.vehicles.find_one({"id": vehicle_id})
+    vehicle = await db.vehicles.find_one({"id": vehicle_id}, {"_id": 0})
     if not vehicle:
         raise HTTPException(status_code=404, detail="Vehicle not found")
     return vehicle
