@@ -747,10 +747,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#FFD700',
   },
   garageTools: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    justifyContent: 'center',
+    paddingVertical: 20,
   },
   garageTitle: {
     fontSize: 20,
