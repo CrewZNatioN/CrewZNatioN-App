@@ -339,12 +339,140 @@ async def create_post(post_data: PostCreate, current_user: dict = Depends(get_cu
     post = Post(
         user_id=current_user["id"],
         image=post_data.image,
-        caption=post_data.caption,
-        vehicle_id=post_data.vehicle_id
+        video=post_data.video,
+        caption=post_data.caption or "",
+        tagged_users=post_data.tagged_users or [],
+        type=post_data.type or "post"
     )
     
+    # Set expiration for stories (24 hours)
+    if post_data.type == "story":
+        post.expires_at = datetime.utcnow() + timedelta(hours=24)
+    
     await db.posts.insert_one(post.dict())
-    return {"message": "Post created successfully", "post_id": post.id}
+    return {"message": f"{post_data.type or 'Post'} created successfully", "post_id": post.id}
+
+# Stories Routes
+@api_router.post("/stories")
+async def create_story(story_data: dict, current_user: dict = Depends(get_current_user)):
+    story = Story(
+        user_id=current_user["id"],
+        image=story_data.get("image"),
+        video=story_data.get("video"),
+        duration=story_data.get("duration", 5)
+    )
+    
+    await db.stories.insert_one(story.dict())
+    return {"message": "Story created successfully", "story_id": story.id}
+
+@api_router.get("/stories")
+async def get_stories(current_user: dict = Depends(get_current_user)):
+    # Get active stories (not expired)
+    current_time = datetime.utcnow()
+    stories = await db.stories.find({
+        "expires_at": {"$gt": current_time}
+    }).sort("created_at", -1).to_list(50)
+    
+    # Populate user data
+    story_list = []
+    for story in stories:
+        user = await db.users.find_one({"id": story["user_id"]})
+        story_data = {
+            "id": story["id"],
+            "user": {
+                "username": user["username"] if user else "Unknown",
+                "profile_picture": user.get("profile_picture") if user else None
+            },
+            "image": story.get("image"),
+            "video": story.get("video"),
+            "duration": story["duration"],
+            "views": story["views"],
+            "created_at": story["created_at"].isoformat()
+        }
+        story_list.append(story_data)
+    
+    return story_list
+
+# Reels Routes
+@api_router.post("/reels")
+async def create_reel(reel_data: dict, current_user: dict = Depends(get_current_user)):
+    reel = Reel(
+        user_id=current_user["id"],
+        video=reel_data["video"],
+        caption=reel_data.get("caption", ""),
+        tagged_users=reel_data.get("tagged_users", [])
+    )
+    
+    await db.reels.insert_one(reel.dict())
+    return {"message": "Reel created successfully", "reel_id": reel.id}
+
+@api_router.get("/reels")
+async def get_reels(current_user: dict = Depends(get_current_user)):
+    reels = await db.reels.find().sort("created_at", -1).limit(50).to_list(50)
+    
+    # Populate user data
+    reel_list = []
+    for reel in reels:
+        user = await db.users.find_one({"id": reel["user_id"]})
+        reel_data = {
+            "id": reel["id"],
+            "user": {
+                "username": user["username"] if user else "Unknown",
+                "profile_picture": user.get("profile_picture") if user else None
+            },
+            "video": reel["video"],
+            "caption": reel["caption"],
+            "likes": reel["likes"],
+            "comments": reel["comments"],
+            "views": reel["views"],
+            "created_at": reel["created_at"].isoformat()
+        }
+        reel_list.append(reel_data)
+    
+    return reel_list
+
+# Live Stream Routes
+@api_router.post("/live")
+async def start_live_stream(live_data: dict, current_user: dict = Depends(get_current_user)):
+    live_stream = LiveStream(
+        user_id=current_user["id"],
+        title=live_data["title"],
+        description=live_data.get("description", "")
+    )
+    
+    await db.live_streams.insert_one(live_stream.dict())
+    return {"message": "Live stream started", "stream_id": live_stream.id}
+
+@api_router.get("/live")
+async def get_active_streams():
+    streams = await db.live_streams.find({"is_active": True}).sort("started_at", -1).to_list(20)
+    
+    # Populate user data
+    stream_list = []
+    for stream in streams:
+        user = await db.users.find_one({"id": stream["user_id"]})
+        stream_data = {
+            "id": stream["id"],
+            "user": {
+                "username": user["username"] if user else "Unknown",
+                "profile_picture": user.get("profile_picture") if user else None
+            },
+            "title": stream["title"],
+            "description": stream["description"],
+            "viewers": stream["viewers"],
+            "started_at": stream["started_at"].isoformat()
+        }
+        stream_list.append(stream_data)
+    
+    return stream_list
+
+@api_router.post("/live/{stream_id}/end")
+async def end_live_stream(stream_id: str, current_user: dict = Depends(get_current_user)):
+    await db.live_streams.update_one(
+        {"id": stream_id, "user_id": current_user["id"]},
+        {"$set": {"is_active": False, "ended_at": datetime.utcnow()}}
+    )
+    return {"message": "Live stream ended"}
 
 @api_router.post("/posts/{post_id}/like")
 async def like_post(post_id: str, current_user: dict = Depends(get_current_user)):
