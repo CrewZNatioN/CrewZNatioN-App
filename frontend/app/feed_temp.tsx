@@ -198,10 +198,41 @@ export default function FeedScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft} />
-        <TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.notificationButton, showNotifications && styles.activeNotificationButton]}
+          onPress={() => setShowNotifications(!showNotifications)}
+        >
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
+          {/* Notification badge */}
+          <View style={styles.notificationBadge}>
+            <Text style={styles.notificationBadgeText}>3</Text>
+          </View>
         </TouchableOpacity>
       </View>
+
+      {/* Notifications Panel */}
+      {showNotifications && (
+        <View style={styles.notificationsPanel}>
+          <View style={styles.notificationItem}>
+            <Ionicons name="heart" size={20} color="#FF4444" />
+            <Text style={styles.notificationText}>@user123 liked your post</Text>
+            <Text style={styles.notificationTime}>2m</Text>
+          </View>
+          <View style={styles.notificationItem}>
+            <Ionicons name="chatbubble" size={20} color="#FFD700" />
+            <Text style={styles.notificationText}>@speedster commented on your R1</Text>
+            <Text style={styles.notificationTime}>5m</Text>
+          </View>
+          <View style={styles.notificationItem}>
+            <Ionicons name="person-add" size={20} color="#00AA44" />
+            <Text style={styles.notificationText}>@bikerfan started following you</Text>
+            <Text style={styles.notificationTime}>1h</Text>
+          </View>
+          <TouchableOpacity style={styles.viewAllButton}>
+            <Text style={styles.viewAllText}>View All Notifications</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <FlatList
         data={posts}
