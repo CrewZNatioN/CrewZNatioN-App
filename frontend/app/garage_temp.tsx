@@ -581,6 +581,68 @@ export default function GarageScreen() {
           )}
         </SafeAreaView>
       </Modal>
+
+      {/* Photo Upload Modal */}
+      <Modal
+        visible={showPhotoModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowPhotoModal(false)}
+      >
+        <View style={styles.photoModalContainer}>
+          <View style={styles.photoModalContent}>
+            <View style={styles.photoModalHeader}>
+              <Text style={styles.photoModalTitle}>
+                Add Photo/Video
+              </Text>
+              <TouchableOpacity 
+                onPress={() => setShowPhotoModal(false)}
+                style={styles.closeButton}
+              >
+                <Ionicons name="close" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            
+            <Text style={styles.photoModalSubtitle}>
+              {selectedGarageVehicle ? 
+                `${selectedGarageVehicle.make} ${selectedGarageVehicle.model} (${selectedGarageVehicle.year})` 
+                : 'Vehicle'}
+            </Text>
+
+            <View style={styles.photoOptions}>
+              <TouchableOpacity 
+                style={styles.photoOptionButton}
+                onPress={() => pickImage('camera')}
+              >
+                <LinearGradient
+                  colors={['#FFD700', '#F59E0B']}
+                  style={styles.photoOptionGradient}
+                >
+                  <Ionicons name="camera" size={32} color="#000000" />
+                  <Text style={styles.photoOptionText}>Take Photo</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.photoOptionButton}
+                onPress={() => pickImage('library')}
+              >
+                <LinearGradient
+                  colors={['#FFD700', '#F59E0B']}
+                  style={styles.photoOptionGradient}
+                >
+                  <Ionicons name="images" size={32} color="#000000" />
+                  <Text style={styles.photoOptionText}>Choose from Library</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.photoModalNote}>
+              📸 Photos and videos will be displayed on your vehicle card
+            </Text>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
