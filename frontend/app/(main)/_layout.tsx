@@ -42,6 +42,7 @@ export default function MainLayout() {
         name="feed"
         options={{
           title: 'Feed',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -51,6 +52,7 @@ export default function MainLayout() {
         name="events"
         options={{
           title: 'Events',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" size={size} color={color} />
           ),
@@ -60,6 +62,7 @@ export default function MainLayout() {
         name="camera"
         options={{
           title: 'Upload',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="camera" size={size} color={color} />
           ),
@@ -69,6 +72,7 @@ export default function MainLayout() {
         name="forum"
         options={{
           title: 'Forum',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="chatbubbles" size={size} color={color} />
           ),
@@ -78,6 +82,7 @@ export default function MainLayout() {
         name="garage"
         options={{
           title: 'Garage',
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="car-sport" size={size} color={color} />
           ),
