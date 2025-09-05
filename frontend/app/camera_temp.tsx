@@ -640,4 +640,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  // Filter styles
+  filterSelector: {
+    position: 'absolute',
+    bottom: 200,
+    left: 0,
+    right: 0,
+  },
+  filterScrollContent: {
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  filterButton: {
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  activeFilterButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.9)',
+  },
+  filterText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginTop: 4,
+  },
+  activeFilterText: {
+    color: '#000000',
+  },
+  activeRightButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.8)',
+  },
 });
