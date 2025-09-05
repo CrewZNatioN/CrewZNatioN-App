@@ -614,6 +614,20 @@ export default function GarageScreen() {
                 : 'Vehicle'}
             </Text>
 
+            {/* Caption Input */}
+            <View style={styles.captionContainer}>
+              <TextInput
+                style={styles.captionInput}
+                placeholder="Add a caption... (optional)"
+                placeholderTextColor="#666666"
+                value={photoCaption}
+                onChangeText={setPhotoCaption}
+                multiline
+                maxLength={200}
+              />
+              <Text style={styles.captionCounter}>{photoCaption.length}/200</Text>
+            </View>
+
             <View style={styles.photoOptions}>
               <TouchableOpacity 
                 style={styles.photoOptionButton}
