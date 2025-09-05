@@ -385,23 +385,45 @@ export default function GarageScreen() {
     </TouchableOpacity>
   );
   const renderGarageVehicle = ({ item }: { item: UserGarageVehicle }) => (
-    <TouchableOpacity style={styles.garageVehicleCard}>
+    <TouchableOpacity 
+      style={styles.garageVehicleCard}
+      onPress={() => item.media && item.media.length > 0 ? openMediaViewer(item, 0) : null}
+    >
       <LinearGradient
         colors={['#1A1A1A', '#2D2D2D']}
         style={styles.garageVehicleGradient}
       >
-        {/* Vehicle Image with Garage Lighting Effect */}
+        {/* Vehicle Image with Garage Lighting Effect - MULTIPLE PHOTOS SUPPORT */}
         <View style={styles.vehicleImageContainer}>
-          {item.image ? (
-            <Image 
-              source={{ uri: `data:image/jpeg;base64,${item.image}` }}
-              style={styles.garageVehicleImage}
-            />
+          {item.media && item.media.length > 0 ? (
+            <>
+              <Image 
+                source={{ uri: `data:image/jpeg;base64,${item.media[0].image}` }}
+                style={styles.garageVehicleImage}
+              />
+              {/* Photo counter badge */}
+              {item.media.length > 1 && (
+                <View style={styles.photoCounter}>
+                  <Ionicons name="images" size={12} color="#FFFFFF" />
+                  <Text style={styles.photoCountText}>{item.media.length}</Text>
+                </View>
+              )}
+              {/* Caption preview */}
+              {item.media[0].caption && (
+                <View style={styles.captionPreview}>
+                  <Text style={styles.captionPreviewText} numberOfLines={1}>
+                    {item.media[0].caption}
+                  </Text>
+                </View>
+              )}
+            </>
           ) : (
             <View style={styles.placeholderVehicle}>
               <Ionicons name="car-sport" size={40} color="#FFD700" />
+              <Text style={styles.placeholderText}>Add Photos</Text>
             </View>
           )}
+        </View>
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0.8)']}
             style={styles.vehicleImageOverlay}
