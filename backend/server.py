@@ -64,7 +64,7 @@ class Post(BaseModel):
     caption: str
     likes: int = 0
     comments: int = 0
-    vehicle_id: Optional[str] = None
+    tagged_users: List[str] = []
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class Vehicle(BaseModel):
