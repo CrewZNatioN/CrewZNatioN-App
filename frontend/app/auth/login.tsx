@@ -352,9 +352,9 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   logoImage: {
-    width: 320,
-    height: 160,
-    marginBottom: 20,
+    width: 400,
+    height: 200,
+    marginBottom: 24,
   },
   welcomeText: {
     fontSize: 28,
