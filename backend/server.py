@@ -165,9 +165,16 @@ async def register(user_data: UserCreate):
 
 @api_router.post("/auth/login")
 async def login(user_data: UserLogin):
-    user = await db.users.find_one({"email": user_data.email})
+    # Check if input is email or username
+    if "@" in user_data.email:
+        # It's an email
+        user = await db.users.find_one({"email": user_data.email})
+    else:
+        # It's a username
+        user = await db.users.find_one({"username": user_data.email})
+    
     if not user or not verify_password(user_data.password, user["password"]):
-        raise HTTPException(status_code=401, detail="Incorrect email or password")
+        raise HTTPException(status_code=401, detail="Incorrect email/username or password")
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
