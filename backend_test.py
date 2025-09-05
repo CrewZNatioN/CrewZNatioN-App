@@ -742,7 +742,8 @@ class CrewzNationAPITester:
                 "oauth": "OAuth Integration", 
                 "vehicles": "Vehicle Database",
                 "posts": "Posts Feed API",
-                "events": "Events API"
+                "events": "Events API",
+                "messaging": "Messaging System"
             }.get(category, category)
             
             status = "✅" if failed == 0 else "❌" if passed == 0 else "⚠️"
