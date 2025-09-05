@@ -100,6 +100,7 @@ export default function GarageScreen() {
   };
 
   useEffect(() => {
+    fetchUserData();
     fetchUserGarage();
     fetchAllVehicles();
   }, []);
