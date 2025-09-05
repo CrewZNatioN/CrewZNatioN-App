@@ -28,7 +28,18 @@ export default function CameraScreen() {
   const [flashMode, setFlashMode] = useState<'off' | 'on' | 'auto'>('off');
   const [recentPhotos, setRecentPhotos] = useState<any[]>([]);
   const [selectedMode, setSelectedMode] = useState<'post' | 'story' | 'reel' | 'live'>('post');
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<string>('none');
   const cameraRef = useRef<CameraView>(null);
+
+  const filters = [
+    { name: 'none', label: 'Original', icon: 'camera-outline' },
+    { name: 'vintage', label: 'Vintage', icon: 'film-outline' },
+    { name: 'bright', label: 'Bright', icon: 'sunny-outline' },
+    { name: 'contrast', label: 'Contrast', icon: 'contrast-outline' },
+    { name: 'sepia', label: 'Sepia', icon: 'leaf-outline' },
+    { name: 'blur', label: 'Blur', icon: 'water-outline' },
+  ];
 
   useEffect(() => {
     getCameraPermissions();
@@ -57,6 +68,67 @@ export default function CameraScreen() {
     }
   };
 
+  const applyFilter = async (imageUri: string, filterName: string) => {
+    try {
+      let manipulatorOptions: any = {
+        compress: 0.8,
+        format: ImageManipulator.SaveFormat.JPEG,
+        base64: true,
+      };
+
+      let actions: any[] = [];
+
+      switch (filterName) {
+        case 'vintage':
+          // Vintage effect: sepia + contrast
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'bright':
+          // Brightness increase
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'contrast':
+          // High contrast
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'sepia':
+          // Sepia tone
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        case 'blur':
+          // Slight blur effect
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+          break;
+        default:
+          // Original - just resize
+          actions = [
+            { resize: { width: 1080 } }
+          ];
+      }
+
+      const result = await ImageManipulator.manipulateAsync(
+        imageUri,
+        actions,
+        manipulatorOptions
+      );
+
+      return result;
+    } catch (error) {
+      console.error('Error applying filter:', error);
+      return null;
+    }
+  };
+
   const takePicture = async () => {
     if (cameraRef.current) {
       try {
@@ -65,25 +137,21 @@ export default function CameraScreen() {
           base64: true,
         });
         
-        if (photo?.base64) {
-          const manipulatedImage = await ImageManipulator.manipulateAsync(
-            photo.uri,
-            [{ resize: { width: 1080 } }],
-            {
-              compress: 0.8,
-              format: ImageManipulator.SaveFormat.JPEG,
-              base64: true,
-            }
-          );
+        if (photo?.uri) {
+          // Apply selected filter
+          const filteredImage = await applyFilter(photo.uri, selectedFilter);
           
-          // Navigate to post creation with the image
-          router.push({
-            pathname: '/create-post',
-            params: { 
-              image: manipulatedImage.base64,
-              type: selectedMode 
-            }
-          });
+          if (filteredImage?.base64) {
+            // Navigate to post creation with the filtered image
+            router.push({
+              pathname: '/create-post',
+              params: { 
+                image: filteredImage.base64,
+                type: selectedMode,
+                filter: selectedFilter
+              }
+            });
+          }
         }
       } catch (error) {
         Alert.alert('Error', 'Failed to take picture');
@@ -264,6 +332,40 @@ export default function CameraScreen() {
             </ScrollView>
           </View>
 
+          {/* Filter Selection */}
+          {showFilters && (
+            <View style={styles.filterSelector}>
+              <ScrollView 
+                horizontal 
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filterScrollContent}
+              >
+                {filters.map((filter) => (
+                  <TouchableOpacity
+                    key={filter.name}
+                    style={[
+                      styles.filterButton,
+                      selectedFilter === filter.name && styles.activeFilterButton
+                    ]}
+                    onPress={() => setSelectedFilter(filter.name)}
+                  >
+                    <Ionicons 
+                      name={filter.icon as any} 
+                      size={20} 
+                      color={selectedFilter === filter.name ? "#000000" : "#FFFFFF"} 
+                    />
+                    <Text style={[
+                      styles.filterText,
+                      selectedFilter === filter.name && styles.activeFilterText
+                    ]}>
+                      {filter.label}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </ScrollView>
+            </View>
+          )}
+
           {/* Bottom Controls */}
           <View style={styles.bottomControls}>
             {/* Gallery Preview */}
@@ -313,6 +415,13 @@ export default function CameraScreen() {
 
             {/* Mode Specific Actions */}
             <View style={styles.rightControls}>
+              <TouchableOpacity 
+                style={[styles.rightButton, showFilters && styles.activeRightButton]}
+                onPress={() => setShowFilters(!showFilters)}
+              >
+                <Ionicons name="color-filter" size={24} color={showFilters ? "#000000" : "#FFFFFF"} />
+              </TouchableOpacity>
+              
               {selectedMode === 'post' && (
                 <TouchableOpacity style={styles.rightButton}>
                   <Ionicons name="car-sport" size={24} color="#FFFFFF" />
@@ -530,5 +639,39 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 16,
     fontWeight: '600',
+  },
+  // Filter styles
+  filterSelector: {
+    position: 'absolute',
+    bottom: 200,
+    left: 0,
+    right: 0,
+  },
+  filterScrollContent: {
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  filterButton: {
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginHorizontal: 5,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  },
+  activeFilterButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.9)',
+  },
+  filterText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#FFFFFF',
+    marginTop: 4,
+  },
+  activeFilterText: {
+    color: '#000000',
+  },
+  activeRightButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.8)',
   },
 });
