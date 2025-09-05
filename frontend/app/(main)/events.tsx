@@ -57,28 +57,16 @@ export default function EventsScreen() {
     fetchEvents();
   };
 
-  const joinEvent = async (eventId: string) => {
+  const shareEvent = async (event: Event) => {
     try {
-      const token = await AsyncStorage.getItem('access_token');
-      const response = await fetch(`${BACKEND_URL}/api/events/${eventId}/join`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+      const eventMessage = `🏁 ${event.title}\n\n📅 ${new Date(event.date).toLocaleDateString()}\n📍 ${event.location}\n\n${event.description}\n\nJoin us at this car meet! 🚗💨`;
+      
+      const result = await Share.share({
+        message: eventMessage,
+        title: event.title,
       });
-
-      if (response.ok) {
-        Alert.alert('Success', 'You have joined the event!');
-        setEvents(prev => prev.map(event => 
-          event.id === eventId 
-            ? { ...event, attendees: [...event.attendees, 'current_user'] }
-            : event
-        ));
-      } else {
-        Alert.alert('Error', 'Failed to join event');
-      }
     } catch (error) {
-      Alert.alert('Error', 'Network error. Please try again.');
+      Alert.alert('Error', 'Unable to share event');
     }
   };
 
