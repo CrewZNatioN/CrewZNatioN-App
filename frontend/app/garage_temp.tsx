@@ -1154,4 +1154,68 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontWeight: '500',
   },
+  // Photo Modal Styles
+  photoModalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoModalContent: {
+    backgroundColor: '#1A1A1A',
+    borderRadius: 20,
+    padding: 24,
+    margin: 20,
+    width: width * 0.9,
+    maxWidth: 400,
+  },
+  photoModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  photoModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  closeButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  photoModalSubtitle: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  photoOptions: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  photoOptionButton: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  photoOptionGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  photoOptionText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  photoModalNote: {
+    fontSize: 14,
+    color: '#CCCCCC',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
 });
