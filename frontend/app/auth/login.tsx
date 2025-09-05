@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   welcomeText: {
-    fontSize: 28,
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#FFD700',
     marginBottom: 16,
