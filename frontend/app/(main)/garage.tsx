@@ -335,7 +335,7 @@ export default function GarageScreen() {
         {/* User Info & Vehicle Count */}
         <View style={styles.garageStats}>
           <View style={styles.userSection}>
-            <Text style={styles.usernameText}>@username</Text>
+            <Text style={styles.usernameText}>@{username}</Text>
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statItem}>
