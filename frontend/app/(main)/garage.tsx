@@ -48,6 +48,24 @@ export default function GarageScreen() {
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [username, setUsername] = useState<string>('');
 
+  const fetchUserData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/users/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        setUsername(userData.username);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
   const fetchUserGarage = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token');
