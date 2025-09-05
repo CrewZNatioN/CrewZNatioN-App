@@ -310,7 +310,7 @@ async def get_vehicle(vehicle_id: str):
 # Events Routes
 @api_router.get("/events")
 async def get_events():
-    events = await db.events.find().sort("date", 1).to_list(100)
+    events = await db.events.find({}, {"_id": 0}).sort("date", 1).to_list(100)
     return events
 
 @api_router.post("/events")
