@@ -196,12 +196,18 @@ export default function FeedScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerLeft} />
         <TouchableOpacity 
           style={styles.messageButton}
           onPress={() => router.push('/messages')}
         >
           <Ionicons name="chatbubble-outline" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+        
+        <TouchableOpacity 
+          style={styles.notificationButton}
+          onPress={() => {/* Handle notifications */}}
+        >
+          <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
