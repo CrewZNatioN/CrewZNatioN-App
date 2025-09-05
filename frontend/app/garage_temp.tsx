@@ -134,7 +134,7 @@ export default function GarageScreen() {
     }
   };
 
-  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
+  const addVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
@@ -153,15 +153,37 @@ export default function GarageScreen() {
       if (response.ok) {
         // Refresh garage to show updated photo
         fetchUserGarage();
-        setShowPhotoModal(false);
         setPhotoCaption(''); // Reset caption
-        Alert.alert('Success', 'Photo updated successfully!');
+        Alert.alert('Success', 'Photo added successfully!');
       } else {
-        Alert.alert('Error', 'Failed to update photo');
+        Alert.alert('Error', 'Failed to add photo');
       }
     } catch (error) {
       Alert.alert('Error', 'Network error occurred');
-      console.error('Update photo error:', error);
+      console.error('Add photo error:', error);
+    }
+  };
+
+  const deleteVehiclePhoto = async (vehicleId: string, mediaId: string) => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo/${mediaId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Refresh garage
+        fetchUserGarage();
+        Alert.alert('Success', 'Photo deleted successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to delete photo');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Network error occurred');
+      console.error('Delete photo error:', error);
     }
   };
 
@@ -169,6 +191,12 @@ export default function GarageScreen() {
     setSelectedGarageVehicle(vehicle);
     setPhotoCaption(''); // Reset caption when opening modal
     setShowPhotoModal(true);
+  };
+
+  const openMediaViewer = (vehicle: UserGarageVehicle, startIndex: number = 0) => {
+    setSelectedGarageVehicle(vehicle);
+    setSelectedMediaIndex(startIndex);
+    setShowMediaViewer(true);
   };
 
   const fetchUserData = async () => {
