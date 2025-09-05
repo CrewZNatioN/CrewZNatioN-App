@@ -339,9 +339,8 @@ const styles = StyleSheet.create({
   },
   messageButton: {
     backgroundColor: 'rgba(255, 215, 0, 0.2)',
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 8,
-    marginRight: 8,
   },
   // Notification styles
   notificationButton: {
