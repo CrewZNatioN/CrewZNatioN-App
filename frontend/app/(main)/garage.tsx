@@ -52,6 +52,7 @@ export default function GarageScreen() {
   const [username, setUsername] = useState<string>('');
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedGarageVehicle, setSelectedGarageVehicle] = useState<UserGarageVehicle | null>(null);
+  const [photoCaption, setPhotoCaption] = useState<string>('');
 
   const pickImage = async (type: 'camera' | 'library') => {
     try {
@@ -111,7 +112,8 @@ export default function GarageScreen() {
           await updateVehiclePhoto(
             selectedGarageVehicle.id, 
             manipulatedImage?.base64 || asset.base64,
-            asset.type
+            asset.type,
+            photoCaption
           );
         }
       }
@@ -121,7 +123,7 @@ export default function GarageScreen() {
     }
   };
 
-  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string) => {
+  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
@@ -133,6 +135,7 @@ export default function GarageScreen() {
         body: JSON.stringify({
           image: mediaBase64,
           media_type: mediaType,
+          caption: caption,
         }),
       });
 
@@ -140,6 +143,7 @@ export default function GarageScreen() {
         // Refresh garage to show updated photo
         fetchUserGarage();
         setShowPhotoModal(false);
+        setPhotoCaption(''); // Reset caption
         Alert.alert('Success', 'Photo updated successfully!');
       } else {
         Alert.alert('Error', 'Failed to update photo');
@@ -152,6 +156,7 @@ export default function GarageScreen() {
 
   const openPhotoModal = (vehicle: UserGarageVehicle) => {
     setSelectedGarageVehicle(vehicle);
+    setPhotoCaption(''); // Reset caption when opening modal
     setShowPhotoModal(true);
   };
 
@@ -608,6 +613,20 @@ export default function GarageScreen() {
                 `${selectedGarageVehicle.make} ${selectedGarageVehicle.model} (${selectedGarageVehicle.year})` 
                 : 'Vehicle'}
             </Text>
+
+            {/* Caption Input */}
+            <View style={styles.captionContainer}>
+              <TextInput
+                style={styles.captionInput}
+                placeholder="Add a caption... (optional)"
+                placeholderTextColor="#666666"
+                value={photoCaption}
+                onChangeText={setPhotoCaption}
+                multiline
+                maxLength={200}
+              />
+              <Text style={styles.captionCounter}>{photoCaption.length}/200</Text>
+            </View>
 
             <View style={styles.photoOptions}>
               <TouchableOpacity 
@@ -1217,5 +1236,26 @@ const styles = StyleSheet.create({
     color: '#CCCCCC',
     textAlign: 'center',
     fontStyle: 'italic',
+  },
+  // Caption input styles
+  captionContainer: {
+    marginBottom: 20,
+  },
+  captionInput: {
+    backgroundColor: '#2D2D2D',
+    borderRadius: 12,
+    padding: 12,
+    fontSize: 16,
+    color: '#FFFFFF',
+    maxHeight: 80,
+    textAlignVertical: 'top',
+    borderWidth: 1,
+    borderColor: '#444444',
+  },
+  captionCounter: {
+    fontSize: 12,
+    color: '#999999',
+    textAlign: 'right',
+    marginTop: 4,
   },
 });
