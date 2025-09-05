@@ -369,57 +369,66 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 32,
   },
-  logoCircle: {
-    width: 72,
-    height: 72,
-    borderRadius: 36,
-    borderWidth: 2.5,
-    borderColor: '#FFD700',
-    justifyContent: 'center',
+  crewzNationContainer: {
     alignItems: 'center',
     marginBottom: 20,
   },
-  logoInner: {
-    position: 'relative',
-    justifyContent: 'center',
+  logoSymbolsContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
+    marginBottom: 8,
   },
-  logoC: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+  leftLogoSymbol: {
+    marginRight: 16,
   },
-  logoTriangle: {
+  symbolCircle: {
+    width: 48,
+    height: 48,
+    position: 'relative',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  symbolInnerCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 3,
+    borderColor: '#FFFFFF',
+    backgroundColor: 'transparent',
+  },
+  symbolTriangle: {
     position: 'absolute',
-    right: -6,
-    bottom: -2,
+    right: 8,
+    bottom: 8,
     width: 0,
     height: 0,
-    borderLeftWidth: 6,
+    borderLeftWidth: 8,
     borderRightWidth: 0,
-    borderBottomWidth: 6,
+    borderBottomWidth: 8,
     borderStyle: 'solid',
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
     borderBottomColor: '#FFD700',
-    transform: [{ rotate: '45deg' }],
   },
-  logoTextContainer: {
+  crewzTextContainer: {
     alignItems: 'center',
   },
-  logoCrewz: {
-    fontSize: 32,
+  crewzText: {
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    letterSpacing: 3,
+    letterSpacing: 4,
   },
-  logoNation: {
-    fontSize: 32,
+  nationContainer: {
+    alignItems: 'center',
+  },
+  nationText: {
+    fontSize: 36,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    letterSpacing: 3,
+    letterSpacing: 4,
   },
-  logoO: {
+  nationOText: {
     color: '#FFD700',
   },
   welcomeText: {
