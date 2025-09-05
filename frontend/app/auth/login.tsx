@@ -322,27 +322,27 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 32,
-    paddingTop: 60,
+    paddingTop: 40,
     paddingBottom: 40,
   },
   logoSection: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 24,
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
   },
   logoImage: {
     width: 480,
     height: 240,
-    marginBottom: 32,
+    marginBottom: 12,
   },
   welcomeText: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#FFD700',
-    marginBottom: 32,
+    marginBottom: 16,
   },
   formContainer: {
     flex: 1,
