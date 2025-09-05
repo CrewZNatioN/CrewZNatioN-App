@@ -383,6 +383,12 @@ export default function GarageScreen() {
         <View style={styles.garageActions}>
           <TouchableOpacity 
             style={styles.garageActionButton}
+            onPress={() => openPhotoModal(item)}
+          >
+            <Ionicons name="camera" size={16} color="#FFD700" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.garageActionButton}
             onPress={() => removeVehicleFromGarage(item.id)}
           >
             <Ionicons name="build" size={16} color="#FFD700" />
