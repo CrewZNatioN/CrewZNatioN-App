@@ -762,7 +762,7 @@ async def get_messages(conversation_partner_id: str, current_user: dict = Depend
             {"sender_id": current_user["id"], "receiver_id": conversation_partner_id},
             {"sender_id": conversation_partner_id, "receiver_id": current_user["id"]}
         ]
-    }).sort("created_at", 1).to_list(None)
+    }, {"_id": 0}).sort("created_at", 1).to_list(None)
     
     # Mark messages as read
     await db.messages.update_many(
