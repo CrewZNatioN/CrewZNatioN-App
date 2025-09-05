@@ -653,7 +653,7 @@ const styles = StyleSheet.create({
   },
   userSearchInput: {
     flex: 1,
-    backgroundColor: '#2A2A2A',
+    backgroundColor: '#333333',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 8,
