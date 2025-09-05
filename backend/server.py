@@ -771,20 +771,20 @@ async def get_messages(conversation_partner_id: str, current_user: dict = Depend
     )
     
     # Reset unread count in conversation
-    await db.conversations.update_one(
-        {
-            "$or": [
-                {"user1_id": current_user["id"], "user2_id": conversation_partner_id},
-                {"user1_id": conversation_partner_id, "user2_id": current_user["id"]}
-            ]
-        },
-        {
-            "$set": {
-                "user1_unread_count": 0 if await db.conversations.find_one({"user1_id": current_user["id"]}) else None,
-                "user2_unread_count": 0 if await db.conversations.find_one({"user2_id": current_user["id"]}) else None
-            }
-        }
-    )
+    conversation_filter = {
+        "$or": [
+            {"user1_id": current_user["id"], "user2_id": conversation_partner_id},
+            {"user1_id": conversation_partner_id, "user2_id": current_user["id"]}
+        ]
+    }
+    
+    existing_conversation = await db.conversations.find_one(conversation_filter)
+    if existing_conversation:
+        # Reset the appropriate unread count based on which user is current user
+        if existing_conversation["user1_id"] == current_user["id"]:
+            await db.conversations.update_one(conversation_filter, {"$set": {"user1_unread_count": 0}})
+        else:
+            await db.conversations.update_one(conversation_filter, {"$set": {"user2_unread_count": 0}})
     
     return messages
 
