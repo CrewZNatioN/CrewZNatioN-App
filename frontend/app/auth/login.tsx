@@ -132,55 +132,15 @@ export default function LoginScreen() {
           {/* Logo Section */}
           <View style={styles.logoSection}>
             <View style={styles.logoContainer}>
-              {/* CREWZ NATION Logo - matching the SVG exactly */}
-              <View style={styles.crewzNationContainer}>
-                {/* Main Logo Row */}
-                <View style={styles.mainLogoRow}>
-                  {/* Left Symbol */}
-                  <View style={styles.leftSymbol}>
-                    <View style={styles.outerCircle}>
-                      <View style={styles.innerElements}>
-                        <View style={styles.centerDot} />
-                        <View style={styles.triangularElements}>
-                          <View style={styles.triangle1} />
-                          <View style={styles.triangle2} />
-                          <View style={styles.triangle3} />
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                  
-                  {/* CREWZ Text */}
-                  <View style={styles.crewzContainer}>
-                    <Text style={styles.crewzMainText}>CREWZ</Text>
-                  </View>
-                  
-                  {/* Right Symbol */}
-                  <View style={styles.rightSymbol}>
-                    <View style={styles.outerCircle}>
-                      <View style={styles.innerElements}>
-                        <View style={styles.centerDot} />
-                        <View style={styles.triangularElements}>
-                          <View style={styles.triangle1} />
-                          <View style={styles.triangle2} />
-                          <View style={styles.triangle3} />
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-                
-                {/* NATION Text */}
-                <View style={styles.nationRow}>
-                  <Text style={styles.nationMainText}>
-                    NATI<Text style={styles.nationHighlight}>O</Text>N
-                  </Text>
-                </View>
-              </View>
+              {/* CREWZ NATION Logo - using actual image */}
+              <Image 
+                source={require('../../assets/images/nation_logo.png')}
+                style={styles.logoImage}
+                resizeMode="contain"
+              />
             </View>
             
             <Text style={styles.welcomeText}>Welcome Back</Text>
-            <Text style={styles.signInText}>Sign in to CrewzNatioN</Text>
           </View>
 
           {/* Toggle Buttons */}
