@@ -11,11 +11,14 @@ import {
   Modal,
   TextInput,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const { width, height } = Dimensions.get('window');
 
@@ -47,6 +50,110 @@ export default function GarageScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [username, setUsername] = useState<string>('');
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
+  const [selectedGarageVehicle, setSelectedGarageVehicle] = useState<UserGarageVehicle | null>(null);
+
+  const pickImage = async (type: 'camera' | 'library') => {
+    try {
+      let result;
+      
+      if (type === 'camera') {
+        // Request camera permissions
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+          Alert.alert('Permission Required', 'Camera permission is required to take photos');
+          return;
+        }
+        
+        result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.8,
+          base64: true,
+        });
+      } else {
+        // Request library permissions
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+          Alert.alert('Permission Required', 'Photo library permission is required to select photos');
+          return;
+        }
+        
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.8,
+          base64: true,
+        });
+      }
+
+      if (!result.cancelled && result.assets && result.assets[0]) {
+        const asset = result.assets[0];
+        
+        // Process the image
+        let manipulatedImage;
+        if (asset.type === 'image') {
+          manipulatedImage = await ImageManipulator.manipulateAsync(
+            asset.uri,
+            [{ resize: { width: 800 } }],
+            {
+              compress: 0.8,
+              format: ImageManipulator.SaveFormat.JPEG,
+              base64: true,
+            }
+          );
+        }
+
+        // Update the vehicle with the photo/video
+        if (selectedGarageVehicle && (asset.base64 || manipulatedImage?.base64)) {
+          await updateVehiclePhoto(
+            selectedGarageVehicle.id, 
+            manipulatedImage?.base64 || asset.base64,
+            asset.type
+          );
+        }
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to process media');
+      console.error('Media picking error:', error);
+    }
+  };
+
+  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string) => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          image: mediaBase64,
+          media_type: mediaType,
+        }),
+      });
+
+      if (response.ok) {
+        // Refresh garage to show updated photo
+        fetchUserGarage();
+        setShowPhotoModal(false);
+        Alert.alert('Success', 'Photo updated successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to update photo');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Network error occurred');
+      console.error('Update photo error:', error);
+    }
+  };
+
+  const openPhotoModal = (vehicle: UserGarageVehicle) => {
+    setSelectedGarageVehicle(vehicle);
+    setShowPhotoModal(true);
+  };
 
   const fetchUserData = async () => {
     try {
@@ -276,6 +383,12 @@ export default function GarageScreen() {
         <View style={styles.garageActions}>
           <TouchableOpacity 
             style={styles.garageActionButton}
+            onPress={() => openPhotoModal(item)}
+          >
+            <Ionicons name="camera" size={16} color="#FFD700" />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={styles.garageActionButton}
             onPress={() => removeVehicleFromGarage(item.id)}
           >
             <Ionicons name="build" size={16} color="#FFD700" />
@@ -467,6 +580,68 @@ export default function GarageScreen() {
             </>
           )}
         </SafeAreaView>
+      </Modal>
+
+      {/* Photo Upload Modal */}
+      <Modal
+        visible={showPhotoModal}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={() => setShowPhotoModal(false)}
+      >
+        <View style={styles.photoModalContainer}>
+          <View style={styles.photoModalContent}>
+            <View style={styles.photoModalHeader}>
+              <Text style={styles.photoModalTitle}>
+                Add Photo/Video
+              </Text>
+              <TouchableOpacity 
+                onPress={() => setShowPhotoModal(false)}
+                style={styles.closeButton}
+              >
+                <Ionicons name="close" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+            
+            <Text style={styles.photoModalSubtitle}>
+              {selectedGarageVehicle ? 
+                `${selectedGarageVehicle.make} ${selectedGarageVehicle.model} (${selectedGarageVehicle.year})` 
+                : 'Vehicle'}
+            </Text>
+
+            <View style={styles.photoOptions}>
+              <TouchableOpacity 
+                style={styles.photoOptionButton}
+                onPress={() => pickImage('camera')}
+              >
+                <LinearGradient
+                  colors={['#FFD700', '#F59E0B']}
+                  style={styles.photoOptionGradient}
+                >
+                  <Ionicons name="camera" size={32} color="#000000" />
+                  <Text style={styles.photoOptionText}>Take Photo</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.photoOptionButton}
+                onPress={() => pickImage('library')}
+              >
+                <LinearGradient
+                  colors={['#FFD700', '#F59E0B']}
+                  style={styles.photoOptionGradient}
+                >
+                  <Ionicons name="images" size={32} color="#000000" />
+                  <Text style={styles.photoOptionText}>Choose from Library</Text>
+                </LinearGradient>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.photoModalNote}>
+              📸 Photos and videos will be displayed on your vehicle card
+            </Text>
+          </View>
+        </View>
       </Modal>
     </SafeAreaView>
   );
@@ -978,5 +1153,69 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     marginLeft: 12,
     fontWeight: '500',
+  },
+  // Photo Modal Styles
+  photoModalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoModalContent: {
+    backgroundColor: '#1A1A1A',
+    borderRadius: 20,
+    padding: 24,
+    margin: 20,
+    width: width * 0.9,
+    maxWidth: 400,
+  },
+  photoModalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  photoModalTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFD700',
+  },
+  closeButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  photoModalSubtitle: {
+    fontSize: 16,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  photoOptions: {
+    gap: 16,
+    marginBottom: 24,
+  },
+  photoOptionButton: {
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  photoOptionGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 20,
+    gap: 12,
+  },
+  photoOptionText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#000000',
+  },
+  photoModalNote: {
+    fontSize: 14,
+    color: '#CCCCCC',
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 });
