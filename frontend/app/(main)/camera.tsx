@@ -569,22 +569,6 @@ const styles = StyleSheet.create({
     color: '#666666',
     marginTop: 4,
   },
-  vehicleSection: {
-    marginBottom: 32,
-  },
-  vehicleCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 12,
-    marginRight: 12,
-    minWidth: 120,
-    borderWidth: 2,
-    borderColor: '#333333',
-  },
-  vehicleCardSelected: {
-    borderColor: '#FFD700',
-    backgroundColor: '#2A2A00',
-  },
   vehicleCardText: {
     fontSize: 14,
     fontWeight: '600',
