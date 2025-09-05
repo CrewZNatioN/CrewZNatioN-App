@@ -137,25 +137,21 @@ export default function CameraScreen() {
           base64: true,
         });
         
-        if (photo?.base64) {
-          const manipulatedImage = await ImageManipulator.manipulateAsync(
-            photo.uri,
-            [{ resize: { width: 1080 } }],
-            {
-              compress: 0.8,
-              format: ImageManipulator.SaveFormat.JPEG,
-              base64: true,
-            }
-          );
+        if (photo?.uri) {
+          // Apply selected filter
+          const filteredImage = await applyFilter(photo.uri, selectedFilter);
           
-          // Navigate to post creation with the image
-          router.push({
-            pathname: '/create-post',
-            params: { 
-              image: manipulatedImage.base64,
-              type: selectedMode 
-            }
-          });
+          if (filteredImage?.base64) {
+            // Navigate to post creation with the filtered image
+            router.push({
+              pathname: '/create-post',
+              params: { 
+                image: filteredImage.base64,
+                type: selectedMode,
+                filter: selectedFilter
+              }
+            });
+          }
         }
       } catch (error) {
         Alert.alert('Error', 'Failed to take picture');
