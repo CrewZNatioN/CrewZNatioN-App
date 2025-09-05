@@ -12,7 +12,7 @@ import uuid
 import time
 
 # Configuration
-BASE_URL = "https://car-social-app.preview.emergentagent.com/api"
+BASE_URL = "https://crewznation-app-1.preview.emergentagent.com/api"
 TEST_USER_EMAIL = "john.doe@crewznation.com"
 TEST_USER_USERNAME = "johndoe_crewz"
 TEST_USER_PASSWORD = "CrewzNation2025!"
