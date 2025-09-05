@@ -36,6 +36,30 @@ interface Post {
   };
 }
 
+interface Story {
+  id: string;
+  user_id: string;
+  user: {
+    username: string;
+    profilePicture?: string;
+  };
+  media: string;
+  media_type: string;
+  created_at: string;
+  expires_at: string;
+  views: string[];
+}
+
+interface StoryGroup {
+  user_id: string;
+  user: {
+    username: string;
+    profilePicture?: string;
+  };
+  stories: Story[];
+  hasUnviewed: boolean;
+}
+
 export default function FeedScreen() {
   const router = useRouter();
   const [posts, setPosts] = useState<Post[]>([]);
