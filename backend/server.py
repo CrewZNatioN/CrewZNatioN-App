@@ -130,6 +130,33 @@ class Event(BaseModel):
     is_private: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+class Message(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    sender_id: str
+    receiver_id: str
+    content: str
+    message_type: str = "text"  # text, image, video
+    media_url: Optional[str] = None
+    is_read: bool = False
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class MessageCreate(BaseModel):
+    receiver_id: str
+    content: str
+    message_type: str = "text"
+    media_url: Optional[str] = None
+
+class Conversation(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user1_id: str
+    user2_id: str
+    last_message: Optional[str] = None
+    last_message_time: Optional[datetime] = None
+    user1_unread_count: int = 0
+    user2_unread_count: int = 0
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
 # Helper functions
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
