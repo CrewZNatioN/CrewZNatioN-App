@@ -39,6 +39,15 @@ interface Vehicle {
 interface UserGarageVehicle extends Vehicle {
   notes?: string;
   dateAdded: string;
+  media?: MediaItem[];
+}
+
+interface MediaItem {
+  id: string;
+  image: string;
+  media_type: string;
+  caption: string;
+  created_at: string;
 }
 
 export default function GarageScreen() {
