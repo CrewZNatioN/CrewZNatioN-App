@@ -138,7 +138,7 @@ export default function EventsScreen() {
                   styles.joinButton,
                   isJoined && styles.joinedButton
                 ]}
-                onPress={() => !isJoined && joinEvent(item.id)}
+                onPress={() => shareEvent(item)}
               >
                 <Ionicons 
                   name={isJoined ? "checkmark-circle" : "add-circle-outline"} 
@@ -153,7 +153,10 @@ export default function EventsScreen() {
                 </Text>
               </TouchableOpacity>
               
-              <TouchableOpacity style={styles.shareButton}>
+              <TouchableOpacity 
+                style={styles.shareButton}
+                onPress={() => shareEvent(item)}
+              >
                 <Ionicons name="share-outline" size={20} color="#CCCCCC" />
               </TouchableOpacity>
             </View>
