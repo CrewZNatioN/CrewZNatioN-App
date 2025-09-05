@@ -28,8 +28,10 @@ export default function CameraScreen() {
   const [type, setType] = useState<'back' | 'front'>('back');
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [caption, setCaption] = useState('');
-  const [vehicles, setVehicles] = useState<any[]>([]);
-  const [selectedVehicle, setSelectedVehicle] = useState<string | null>(null);
+  const [users, setUsers] = useState<any[]>([]);
+  const [taggedUsers, setTaggedUsers] = useState<string[]>([]);
+  const [showUserSearch, setShowUserSearch] = useState(false);
+  const [userSearchQuery, setUserSearchQuery] = useState('');
   const [uploading, setUploading] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const cameraRef = useRef<CameraView>(null);
