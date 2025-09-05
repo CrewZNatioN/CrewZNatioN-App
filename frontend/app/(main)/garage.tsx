@@ -39,6 +39,15 @@ interface Vehicle {
 interface UserGarageVehicle extends Vehicle {
   notes?: string;
   dateAdded: string;
+  media?: MediaItem[];
+}
+
+interface MediaItem {
+  id: string;
+  image: string;
+  media_type: string;
+  caption: string;
+  created_at: string;
 }
 
 export default function GarageScreen() {
@@ -53,6 +62,8 @@ export default function GarageScreen() {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedGarageVehicle, setSelectedGarageVehicle] = useState<UserGarageVehicle | null>(null);
   const [photoCaption, setPhotoCaption] = useState<string>('');
+  const [showMediaViewer, setShowMediaViewer] = useState(false);
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
 
   const pickImage = async (type: 'camera' | 'library') => {
     try {
@@ -107,9 +118,9 @@ export default function GarageScreen() {
           );
         }
 
-        // Update the vehicle with the photo/video
+        // Update the vehicle with the photo/video - ADD to existing media
         if (selectedGarageVehicle && (asset.base64 || manipulatedImage?.base64)) {
-          await updateVehiclePhoto(
+          await addVehiclePhoto(
             selectedGarageVehicle.id, 
             manipulatedImage?.base64 || asset.base64,
             asset.type,
@@ -123,7 +134,7 @@ export default function GarageScreen() {
     }
   };
 
-  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
+  const addVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string, caption: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
@@ -142,15 +153,37 @@ export default function GarageScreen() {
       if (response.ok) {
         // Refresh garage to show updated photo
         fetchUserGarage();
-        setShowPhotoModal(false);
         setPhotoCaption(''); // Reset caption
-        Alert.alert('Success', 'Photo updated successfully!');
+        Alert.alert('Success', 'Photo added successfully!');
       } else {
-        Alert.alert('Error', 'Failed to update photo');
+        Alert.alert('Error', 'Failed to add photo');
       }
     } catch (error) {
       Alert.alert('Error', 'Network error occurred');
-      console.error('Update photo error:', error);
+      console.error('Add photo error:', error);
+    }
+  };
+
+  const deleteVehiclePhoto = async (vehicleId: string, mediaId: string) => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo/${mediaId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        // Refresh garage
+        fetchUserGarage();
+        Alert.alert('Success', 'Photo deleted successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to delete photo');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Network error occurred');
+      console.error('Delete photo error:', error);
     }
   };
 
@@ -158,6 +191,12 @@ export default function GarageScreen() {
     setSelectedGarageVehicle(vehicle);
     setPhotoCaption(''); // Reset caption when opening modal
     setShowPhotoModal(true);
+  };
+
+  const openMediaViewer = (vehicle: UserGarageVehicle, startIndex: number = 0) => {
+    setSelectedGarageVehicle(vehicle);
+    setSelectedMediaIndex(startIndex);
+    setShowMediaViewer(true);
   };
 
   const fetchUserData = async () => {
@@ -346,23 +385,45 @@ export default function GarageScreen() {
     </TouchableOpacity>
   );
   const renderGarageVehicle = ({ item }: { item: UserGarageVehicle }) => (
-    <TouchableOpacity style={styles.garageVehicleCard}>
+    <TouchableOpacity 
+      style={styles.garageVehicleCard}
+      onPress={() => item.media && item.media.length > 0 ? openMediaViewer(item, 0) : null}
+    >
       <LinearGradient
         colors={['#1A1A1A', '#2D2D2D']}
         style={styles.garageVehicleGradient}
       >
-        {/* Vehicle Image with Garage Lighting Effect */}
+        {/* Vehicle Image with Garage Lighting Effect - MULTIPLE PHOTOS SUPPORT */}
         <View style={styles.vehicleImageContainer}>
-          {item.image ? (
-            <Image 
-              source={{ uri: `data:image/jpeg;base64,${item.image}` }}
-              style={styles.garageVehicleImage}
-            />
+          {item.media && item.media.length > 0 ? (
+            <>
+              <Image 
+                source={{ uri: `data:image/jpeg;base64,${item.media[0].image}` }}
+                style={styles.garageVehicleImage}
+              />
+              {/* Photo counter badge */}
+              {item.media.length > 1 && (
+                <View style={styles.photoCounter}>
+                  <Ionicons name="images" size={12} color="#FFFFFF" />
+                  <Text style={styles.photoCountText}>{item.media.length}</Text>
+                </View>
+              )}
+              {/* Caption preview */}
+              {item.media[0].caption && (
+                <View style={styles.captionPreview}>
+                  <Text style={styles.captionPreviewText} numberOfLines={1}>
+                    {item.media[0].caption}
+                  </Text>
+                </View>
+              )}
+            </>
           ) : (
             <View style={styles.placeholderVehicle}>
               <Ionicons name="car-sport" size={40} color="#FFD700" />
+              <Text style={styles.placeholderText}>Add Photos</Text>
             </View>
           )}
+        </View>
           <LinearGradient
             colors={['transparent', 'rgba(0,0,0,0.8)']}
             style={styles.vehicleImageOverlay}
@@ -660,6 +721,110 @@ export default function GarageScreen() {
               📸 Photos and videos will be displayed on your vehicle card
             </Text>
           </View>
+        </View>
+      </Modal>
+
+      {/* Media Viewer Modal - FULL SCREEN PHOTO/VIDEO GALLERY */}
+      <Modal
+        visible={showMediaViewer}
+        animationType="fade"
+        transparent={false}
+        onRequestClose={() => setShowMediaViewer(false)}
+      >
+        <View style={styles.mediaViewerContainer}>
+          <View style={styles.mediaViewerHeader}>
+            <TouchableOpacity 
+              onPress={() => setShowMediaViewer(false)}
+              style={styles.mediaCloseButton}
+            >
+              <Ionicons name="close" size={28} color="#FFFFFF" />
+            </TouchableOpacity>
+            
+            <View style={styles.mediaInfo}>
+              <Text style={styles.mediaVehicleTitle}>
+                {selectedGarageVehicle ? 
+                  `${selectedGarageVehicle.make} ${selectedGarageVehicle.model} (${selectedGarageVehicle.year})` 
+                  : 'Vehicle'}
+              </Text>
+              <Text style={styles.mediaCounter}>
+                {selectedGarageVehicle?.media ? 
+                  `${selectedMediaIndex + 1} of ${selectedGarageVehicle.media.length}` 
+                  : ''}
+              </Text>
+            </View>
+
+            <TouchableOpacity 
+              onPress={() => {
+                if (selectedGarageVehicle?.media && selectedGarageVehicle.media[selectedMediaIndex]) {
+                  Alert.alert(
+                    'Delete Photo',
+                    'Are you sure you want to delete this photo?',
+                    [
+                      { text: 'Cancel', style: 'cancel' },
+                      { 
+                        text: 'Delete', 
+                        style: 'destructive',
+                        onPress: () => deleteVehiclePhoto(
+                          selectedGarageVehicle.id, 
+                          selectedGarageVehicle.media[selectedMediaIndex].id
+                        )
+                      }
+                    ]
+                  );
+                }
+              }}
+              style={styles.mediaDeleteButton}
+            >
+              <Ionicons name="trash" size={24} color="#FF4444" />
+            </TouchableOpacity>
+          </View>
+
+          {selectedGarageVehicle?.media && selectedGarageVehicle.media.length > 0 && (
+            <ScrollView 
+              horizontal 
+              pagingEnabled
+              showsHorizontalScrollIndicator={false}
+              onMomentumScrollEnd={(event) => {
+                const index = Math.round(event.nativeEvent.contentOffset.x / width);
+                setSelectedMediaIndex(index);
+              }}
+              contentOffset={{ x: selectedMediaIndex * width, y: 0 }}
+            >
+              {selectedGarageVehicle.media.map((media, index) => (
+                <View key={media.id} style={styles.mediaSlide}>
+                  <Image 
+                    source={{ uri: `data:image/jpeg;base64,${media.image}` }}
+                    style={styles.fullscreenImage}
+                    resizeMode="contain"
+                  />
+                  {media.caption && (
+                    <View style={styles.fullscreenCaption}>
+                      <Text style={styles.fullscreenCaptionText}>
+                        {media.caption}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))}
+            </ScrollView>
+          )}
+
+          {/* Add more photos button */}
+          <TouchableOpacity 
+            style={styles.addMorePhotosButton}
+            onPress={() => {
+              setShowMediaViewer(false);
+              setTimeout(() => openPhotoModal(selectedGarageVehicle!), 100);
+            }}
+          >
+            <LinearGradient
+              colors={['#FFD700', '#F59E0B']}
+              style={styles.addMorePhotosGradient}
+            >
+              <Ionicons name="camera" size={20} color="#000000" />
+              <Text style={styles.addMorePhotosText}>Add More Photos</Text>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
       </Modal>
     </SafeAreaView>
@@ -1257,5 +1422,43 @@ const styles = StyleSheet.create({
     color: '#999999',
     textAlign: 'right',
     marginTop: 4,
+  },
+  // Multiple photos support styles
+  photoCounter: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    borderRadius: 12,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  photoCountText: {
+    fontSize: 10,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    marginLeft: 2,
+  },
+  captionPreview: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  captionPreviewText: {
+    fontSize: 10,
+    color: '#FFFFFF',
+    fontStyle: 'italic',
+  },
+  placeholderText: {
+    fontSize: 12,
+    color: '#FFD700',
+    marginTop: 4,
+    fontWeight: '500',
   },
 });
