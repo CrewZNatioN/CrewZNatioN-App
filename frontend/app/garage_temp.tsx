@@ -323,19 +323,7 @@ export default function GarageScreen() {
         style={styles.garageHeader}
       >
         <View style={styles.garageTools}>
-          <TouchableOpacity 
-            style={[styles.toolButton, showGarageTools && styles.activeToolButton]}
-            onPress={() => setShowGarageTools(!showGarageTools)}
-          >
-            <Ionicons name="build" size={24} color={showGarageTools ? "#000000" : "#FFD700"} />
-          </TouchableOpacity>
           <Text style={styles.garageTitle}>MY GARAGE</Text>
-          <TouchableOpacity 
-            style={styles.addVehicleIcon}
-            onPress={() => setShowAddModal(true)}
-          >
-            <Ionicons name="car-sport" size={24} color="#FFD700" />
-          </TouchableOpacity>
         </View>
         
         {/* Username centered under garage title */}
