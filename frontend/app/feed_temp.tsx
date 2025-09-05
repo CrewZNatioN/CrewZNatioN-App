@@ -65,6 +65,10 @@ export default function FeedScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [storyGroups, setStoryGroups] = useState<StoryGroup[]>([]);
+  const [showStoryViewer, setShowStoryViewer] = useState(false);
+  const [selectedStoryGroup, setSelectedStoryGroup] = useState<StoryGroup | null>(null);
+  const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
 
   const fetchPosts = async () => {
     try {
