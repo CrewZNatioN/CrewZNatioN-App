@@ -618,7 +618,7 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   removeTagButton: {
-    marginLeft: 4,
+    padding: 2,
   },
   addUserButton: {
     flexDirection: 'row',
