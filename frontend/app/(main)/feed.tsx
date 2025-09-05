@@ -79,7 +79,6 @@ export default function FeedScreen() {
         },
       });
       
-      // Update local state
       setPosts(prev => prev.map(post => 
         post._id === postId 
           ? { ...post, likes: post.likes + 1 }
@@ -102,7 +101,7 @@ export default function FeedScreen() {
                 style={styles.avatarImage}
               />
             ) : (
-              <Ionicons name="person-circle" size={40} color="#9CA3AF" />
+              <Ionicons name="person-circle" size={40} color="#666666" />
             )}
           </View>
           <View style={styles.userDetails}>
@@ -115,7 +114,7 @@ export default function FeedScreen() {
           </View>
         </View>
         <TouchableOpacity>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#6B7280" />
+          <Ionicons name="ellipsis-horizontal" size={24} color="#CCCCCC" />
         </TouchableOpacity>
       </View>
 
@@ -133,17 +132,17 @@ export default function FeedScreen() {
             style={styles.actionButton}
             onPress={() => handleLike(item._id)}
           >
-            <Ionicons name="heart-outline" size={24} color="#374151" />
+            <Ionicons name="heart-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="chatbubble-outline" size={24} color="#374151" />
+            <Ionicons name="chatbubble-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButton}>
-            <Ionicons name="paper-plane-outline" size={24} color="#374151" />
+            <Ionicons name="paper-plane-outline" size={24} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
         <TouchableOpacity>
-          <Ionicons name="bookmark-outline" size={24} color="#374151" />
+          <Ionicons name="bookmark-outline" size={24} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
 
@@ -190,7 +189,11 @@ export default function FeedScreen() {
         renderItem={renderPost}
         keyExtractor={(item) => item._id}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={onRefresh}
+            tintColor="#FFD700"
+          />
         }
         showsVerticalScrollIndicator={false}
         style={styles.feedList}
@@ -202,7 +205,7 @@ export default function FeedScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#000000',
   },
   header: {
     flexDirection: 'row',
@@ -210,7 +213,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#000000',
+    borderBottomWidth: 1,
+    borderBottomColor: '#1A1A1A',
   },
   headerTitle: {
     fontSize: 20,
@@ -225,14 +230,14 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#6B7280',
+    color: '#CCCCCC',
   },
   feedList: {
     flex: 1,
   },
   postContainer: {
-    backgroundColor: '#FFFFFF',
-    marginBottom: 8,
+    backgroundColor: '#1A1A1A',
+    marginBottom: 1,
   },
   postHeader: {
     flexDirection: 'row',
@@ -258,11 +263,11 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#111827',
+    color: '#FFFFFF',
   },
   vehicleInfo: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#CCCCCC',
     marginTop: 2,
   },
   postImage: {
@@ -289,12 +294,12 @@ const styles = StyleSheet.create({
   likesText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#111827',
+    color: '#FFFFFF',
     marginBottom: 4,
   },
   caption: {
     fontSize: 14,
-    color: '#111827',
+    color: '#FFFFFF',
     lineHeight: 20,
     marginBottom: 4,
   },
@@ -303,11 +308,11 @@ const styles = StyleSheet.create({
   },
   commentsText: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#CCCCCC',
     marginBottom: 4,
   },
   timeAgo: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#666666',
   },
 });

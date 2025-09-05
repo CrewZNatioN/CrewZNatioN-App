@@ -7,11 +7,12 @@ export default function MainLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: '#FCD34D',
-        tabBarInactiveTintColor: '#9CA3AF',
+        tabBarActiveTintColor: '#FFD700',
+        tabBarInactiveTintColor: '#666666',
         tabBarStyle: {
-          backgroundColor: '#1E3A8A',
-          borderTopWidth: 0,
+          backgroundColor: '#000000',
+          borderTopWidth: 1,
+          borderTopColor: '#1A1A1A',
           elevation: 8,
           shadowOpacity: 0.3,
           shadowRadius: 4,
@@ -24,9 +25,11 @@ export default function MainLayout() {
           fontWeight: '600',
         },
         headerStyle: {
-          backgroundColor: '#1E3A8A',
+          backgroundColor: '#000000',
           elevation: 0,
           shadowOpacity: 0,
+          borderBottomWidth: 1,
+          borderBottomColor: '#1A1A1A',
         },
         headerTintColor: '#FFFFFF',
         headerTitleStyle: {

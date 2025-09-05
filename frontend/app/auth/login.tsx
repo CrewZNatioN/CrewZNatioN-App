@@ -9,12 +9,13 @@ import {
   Platform,
   ScrollView,
   Alert,
+  Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
 
@@ -28,6 +29,7 @@ export default function LoginScreen() {
     confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -86,8 +88,6 @@ export default function LoginScreen() {
     try {
       const result = await WebBrowser.openBrowserAsync(authUrl);
       if (result.type === 'opened') {
-        // Handle the authentication flow
-        // The app will be redirected back with session data
         router.replace('/(main)/feed');
       }
     } catch (error) {
@@ -101,121 +101,163 @@ export default function LoginScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardView}
       >
-        <LinearGradient
-          colors={['#1E3A8A', '#3B82F6']}
-          style={styles.gradient}
-        >
-          <ScrollView contentContainerStyle={styles.scrollContent}>
-            <View style={styles.header}>
-              <Text style={styles.title}>
-                {isLogin ? 'Welcome Back' : 'Join CREWZ NATION'}
-              </Text>
-              <Text style={styles.subtitle}>
-                {isLogin ? 'Sign in to continue' : 'Create your account'}
-              </Text>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          {/* Logo Section */}
+          <View style={styles.logoSection}>
+            <View style={styles.logoContainer}>
+              <View style={styles.logoCircle}>
+                <View style={styles.logoInner}>
+                  <Text style={styles.logoC}>C</Text>
+                  <View style={styles.logoTriangle} />
+                </View>
+              </View>
+              <View style={styles.logoTextContainer}>
+                <Text style={styles.logoCrewz}>CREWZ</Text>
+                <Text style={styles.logoNation}>
+                  NATI<Text style={styles.logoO}>O</Text>N
+                </Text>
+              </View>
+            </View>
+            
+            <Text style={styles.welcomeText}>Welcome Back</Text>
+            <Text style={styles.signInText}>Sign in to CrewzNatioN</Text>
+          </View>
+
+          {/* Form Section */}
+          <View style={styles.formContainer}>
+            {/* Toggle Buttons */}
+            <View style={styles.toggleContainer}>
+              <TouchableOpacity 
+                style={[styles.toggleButton, isLogin && styles.activeToggle]}
+                onPress={() => setIsLogin(true)}
+              >
+                <Text style={[styles.toggleText, isLogin && styles.activeToggleText]}>
+                  Sign In
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                style={[styles.toggleButton, !isLogin && styles.activeToggle]}
+                onPress={() => setIsLogin(false)}
+              >
+                <Text style={[styles.toggleText, !isLogin && styles.activeToggleText]}>
+                  Sign Up
+                </Text>
+              </TouchableOpacity>
             </View>
 
-            <View style={styles.formContainer}>
-              {/* Email Input */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Email</Text>
+            {/* Email Input */}
+            <View style={styles.inputContainer}>
+              <View style={styles.inputWrapper}>
+                <Ionicons name="mail" size={20} color="#666666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter your email"
-                  placeholderTextColor="#9CA3AF"
+                  placeholder="Email"
+                  placeholderTextColor="#666666"
                   value={formData.email}
                   onChangeText={(text) => handleInputChange('email', text)}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
               </View>
+            </View>
 
-              {/* Username Input (Sign Up Only) */}
-              {!isLogin && (
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>Username</Text>
+            {/* Username Input (Sign Up Only) */}
+            {!isLogin && (
+              <View style={styles.inputContainer}>
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="person" size={20} color="#666666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
-                    placeholder="Choose a username"
-                    placeholderTextColor="#9CA3AF"
+                    placeholder="Username"
+                    placeholderTextColor="#666666"
                     value={formData.username}
                     onChangeText={(text) => handleInputChange('username', text)}
                     autoCapitalize="none"
                   />
                 </View>
-              )}
+              </View>
+            )}
 
-              {/* Password Input */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputLabel}>Password</Text>
+            {/* Password Input */}
+            <View style={styles.inputContainer}>
+              <View style={styles.inputWrapper}>
+                <Ionicons name="lock-closed" size={20} color="#666666" style={styles.inputIcon} />
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter your password"
-                  placeholderTextColor="#9CA3AF"
+                  placeholder="Password"
+                  placeholderTextColor="#666666"
                   value={formData.password}
                   onChangeText={(text) => handleInputChange('password', text)}
-                  secureTextEntry
+                  secureTextEntry={!showPassword}
                 />
+                <TouchableOpacity 
+                  style={styles.eyeIcon}
+                  onPress={() => setShowPassword(!showPassword)}
+                >
+                  <Ionicons 
+                    name={showPassword ? "eye-off" : "eye"} 
+                    size={20} 
+                    color="#666666" 
+                  />
+                </TouchableOpacity>
               </View>
+            </View>
 
-              {/* Confirm Password Input (Sign Up Only) */}
-              {!isLogin && (
-                <View style={styles.inputContainer}>
-                  <Text style={styles.inputLabel}>Confirm Password</Text>
+            {/* Confirm Password Input (Sign Up Only) */}
+            {!isLogin && (
+              <View style={styles.inputContainer}>
+                <View style={styles.inputWrapper}>
+                  <Ionicons name="lock-closed" size={20} color="#666666" style={styles.inputIcon} />
                   <TextInput
                     style={styles.input}
-                    placeholder="Confirm your password"
-                    placeholderTextColor="#9CA3AF"
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#666666"
                     value={formData.confirmPassword}
                     onChangeText={(text) => handleInputChange('confirmPassword', text)}
-                    secureTextEntry
+                    secureTextEntry={!showPassword}
                   />
                 </View>
-              )}
-
-              {/* JWT Auth Button */}
-              <TouchableOpacity 
-                style={styles.primaryButton}
-                onPress={handleJWTAuth}
-                disabled={loading}
-              >
-                <Text style={styles.primaryButtonText}>
-                  {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}
-                </Text>
-              </TouchableOpacity>
-
-              {/* Divider */}
-              <View style={styles.divider}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>OR</Text>
-                <View style={styles.dividerLine} />
               </View>
+            )}
 
-              {/* Google Auth Button */}
-              <TouchableOpacity 
-                style={styles.googleButton}
-                onPress={handleGoogleAuth}
-              >
-                <Text style={styles.googleButtonText}>
-                  Continue with Google
-                </Text>
-              </TouchableOpacity>
+            {/* Sign In Button */}
+            <TouchableOpacity 
+              style={styles.signInButton}
+              onPress={handleJWTAuth}
+              disabled={loading}
+            >
+              <Text style={styles.signInButtonText}>
+                {loading ? 'Loading...' : (isLogin ? 'Sign In' : 'Sign Up')}
+              </Text>
+            </TouchableOpacity>
 
-              {/* Toggle between Login/Sign Up */}
-              <TouchableOpacity 
-                style={styles.toggleButton}
+            {/* Divider */}
+            <View style={styles.dividerContainer}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>or</Text>
+              <View style={styles.dividerLine} />
+            </View>
+
+            {/* Google Button */}
+            <TouchableOpacity 
+              style={styles.googleButton}
+              onPress={handleGoogleAuth}
+            >
+              <Text style={styles.googleButtonText}>Continue with Google</Text>
+            </TouchableOpacity>
+
+            {/* Footer Text */}
+            <Text style={styles.footerText}>
+              {isLogin ? "Don't have an account? " : "Already have an account? "}
+              <Text 
+                style={styles.footerLink}
                 onPress={() => setIsLogin(!isLogin)}
               >
-                <Text style={styles.toggleText}>
-                  {isLogin 
-                    ? "Don't have an account? Sign Up" 
-                    : "Already have an account? Sign In"
-                  }
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </LinearGradient>
+                {isLogin ? "Sign Up" : "Sign In"}
+              </Text>
+            </Text>
+          </View>
+        </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -224,72 +266,151 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000000',
   },
   keyboardView: {
     flex: 1,
   },
-  gradient: {
-    flex: 1,
-  },
   scrollContent: {
     flexGrow: 1,
-    padding: 24,
+    paddingHorizontal: 24,
+    paddingTop: 40,
   },
-  header: {
+  logoSection: {
     alignItems: 'center',
-    marginTop: 40,
     marginBottom: 40,
   },
-  title: {
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  logoCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 3,
+    borderColor: '#FFD700',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  logoInner: {
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logoC: {
     fontSize: 32,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 8,
-    textAlign: 'center',
   },
-  subtitle: {
+  logoTriangle: {
+    position: 'absolute',
+    right: -8,
+    bottom: -4,
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 0,
+    borderBottomWidth: 8,
+    borderStyle: 'solid',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#FFD700',
+    transform: [{ rotate: '45deg' }],
+  },
+  logoTextContainer: {
+    alignItems: 'center',
+  },
+  logoCrewz: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    letterSpacing: 2,
+  },
+  logoNation: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    letterSpacing: 2,
+  },
+  logoO: {
+    color: '#FFD700',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#FFD700',
+    marginBottom: 8,
+  },
+  signInText: {
     fontSize: 16,
-    color: '#E5E7EB',
-    textAlign: 'center',
+    color: '#CCCCCC',
   },
   formContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 20,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.1)',
+    flex: 1,
+  },
+  toggleContainer: {
+    flexDirection: 'row',
+    marginBottom: 32,
+    backgroundColor: '#1A1A1A',
+    borderRadius: 8,
+    padding: 4,
+  },
+  toggleButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: 'center',
+    borderRadius: 6,
+  },
+  activeToggle: {
+    backgroundColor: '#FFD700',
+  },
+  toggleText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#CCCCCC',
+  },
+  activeToggleText: {
+    color: '#000000',
   },
   inputContainer: {
     marginBottom: 20,
   },
-  inputLabel: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 8,
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#1A1A1A',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 4,
+  },
+  inputIcon: {
+    marginRight: 12,
   },
   input: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    padding: 16,
-    color: '#FFFFFF',
+    flex: 1,
     fontSize: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
+    color: '#FFFFFF',
+    paddingVertical: 12,
   },
-  primaryButton: {
-    backgroundColor: '#FCD34D',
-    borderRadius: 16,
+  eyeIcon: {
+    padding: 4,
+  },
+  signInButton: {
+    backgroundColor: '#FFD700',
+    borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
     marginTop: 8,
+    marginBottom: 24,
   },
-  primaryButtonText: {
-    color: '#1E3A8A',
+  signInButtonText: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: '#000000',
   },
-  divider: {
+  dividerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 24,
@@ -297,33 +418,34 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    backgroundColor: '#333333',
   },
   dividerText: {
-    color: '#E5E7EB',
     fontSize: 14,
+    color: '#CCCCCC',
     marginHorizontal: 16,
-    fontWeight: '500',
   },
   googleButton: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: '#333333',
+    borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 24,
   },
   googleButtonText: {
-    color: '#1E3A8A',
     fontSize: 16,
     fontWeight: '600',
+    color: '#FFFFFF',
   },
-  toggleButton: {
-    alignItems: 'center',
-    paddingVertical: 12,
+  footerText: {
+    fontSize: 14,
+    color: '#CCCCCC',
+    textAlign: 'center',
+    marginBottom: 20,
   },
-  toggleText: {
-    color: '#FCD34D',
-    fontSize: 16,
-    fontWeight: '500',
+  footerLink: {
+    color: '#FFD700',
+    fontWeight: '600',
   },
 });
