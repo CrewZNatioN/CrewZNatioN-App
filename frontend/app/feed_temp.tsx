@@ -239,6 +239,56 @@ export default function FeedScreen() {
         </TouchableOpacity>
       </View>
 
+      {/* Stories Section */}
+      <View style={styles.storiesContainer}>
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.storiesScrollContent}
+        >
+          {/* Your Story */}
+          <TouchableOpacity 
+            style={styles.storyItem}
+            onPress={() => router.push('/(main)/camera')}
+          >
+            <View style={styles.yourStoryContainer}>
+              <View style={styles.yourStoryCircle}>
+                <Ionicons name="add" size={24} color="#FFFFFF" />
+              </View>
+              <Text style={styles.storyUsername}>Your Story</Text>
+            </View>
+          </TouchableOpacity>
+
+          {/* Sample Stories - These would come from API */}
+          {[
+            { username: 'speedlover', hasUnviewed: true },
+            { username: 'bikerfan', hasUnviewed: false },
+            { username: 'crewzmember', hasUnviewed: true },
+            { username: 'trackday', hasUnviewed: false },
+            { username: 'motorhead', hasUnviewed: true },
+          ].map((story, index) => (
+            <TouchableOpacity 
+              key={index}
+              style={styles.storyItem}
+              onPress={() => {
+                // This would open story viewer with real data
+                Alert.alert('Story Viewer', `View ${story.username}'s story`);
+              }}
+            >
+              <View style={[
+                styles.storyCircle,
+                story.hasUnviewed ? styles.unviewedStory : styles.viewedStory
+              ]}>
+                <View style={styles.storyAvatar}>
+                  <Ionicons name="person" size={20} color="#666666" />
+                </View>
+              </View>
+              <Text style={styles.storyUsername}>{story.username}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+
       <FlatList
         data={posts}
         renderItem={renderPost}
