@@ -131,17 +131,29 @@ export default function LoginScreen() {
           {/* Logo Section */}
           <View style={styles.logoSection}>
             <View style={styles.logoContainer}>
-              <View style={styles.logoCircle}>
-                <View style={styles.logoInner}>
-                  <Text style={styles.logoC}>C</Text>
-                  <View style={styles.logoTriangle} />
+              {/* CREWZ NATION Logo - matching the SVG */}
+              <View style={styles.crewzNationContainer}>
+                <View style={styles.logoSymbolsContainer}>
+                  {/* Left Logo Symbol */}
+                  <View style={styles.leftLogoSymbol}>
+                    <View style={styles.symbolCircle}>
+                      <View style={styles.symbolInnerCircle} />
+                      <View style={styles.symbolTriangle} />
+                    </View>
+                  </View>
+                  
+                  {/* CREWZ Text */}
+                  <View style={styles.crewzTextContainer}>
+                    <Text style={styles.crewzText}>CREWZ</Text>
+                  </View>
                 </View>
-              </View>
-              <View style={styles.logoTextContainer}>
-                <Text style={styles.logoCrewz}>CREWZ</Text>
-                <Text style={styles.logoNation}>
-                  NATI<Text style={styles.logoO}>O</Text>N
-                </Text>
+                
+                {/* NATION Text */}
+                <View style={styles.nationContainer}>
+                  <Text style={styles.nationText}>
+                    NATI<Text style={styles.nationOText}>O</Text>N
+                  </Text>
+                </View>
               </View>
             </View>
             
