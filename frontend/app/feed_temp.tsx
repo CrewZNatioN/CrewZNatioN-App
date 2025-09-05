@@ -493,4 +493,63 @@ const styles = StyleSheet.create({
     color: '#FFD700',
     fontWeight: '600',
   },
+  // Stories styles
+  storiesContainer: {
+    backgroundColor: '#1A1A1A',
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+  },
+  storiesScrollContent: {
+    paddingHorizontal: 16,
+  },
+  storyItem: {
+    alignItems: 'center',
+    marginRight: 16,
+    width: 70,
+  },
+  yourStoryContainer: {
+    alignItems: 'center',
+  },
+  yourStoryCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    backgroundColor: '#333333',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#FFD700',
+    marginBottom: 8,
+  },
+  storyCircle: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  unviewedStory: {
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  viewedStory: {
+    borderWidth: 2,
+    borderColor: '#666666',
+  },
+  storyAvatar: {
+    width: 54,
+    height: 54,
+    borderRadius: 27,
+    backgroundColor: '#333333',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  storyUsername: {
+    fontSize: 12,
+    color: '#FFFFFF',
+    textAlign: 'center',
+    maxWidth: 70,
+  },
 });
