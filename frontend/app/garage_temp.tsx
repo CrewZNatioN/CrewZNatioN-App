@@ -53,6 +53,108 @@ export default function GarageScreen() {
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedGarageVehicle, setSelectedGarageVehicle] = useState<UserGarageVehicle | null>(null);
 
+  const pickImage = async (type: 'camera' | 'library') => {
+    try {
+      let result;
+      
+      if (type === 'camera') {
+        // Request camera permissions
+        const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permissionResult.granted) {
+          Alert.alert('Permission Required', 'Camera permission is required to take photos');
+          return;
+        }
+        
+        result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.8,
+          base64: true,
+        });
+      } else {
+        // Request library permissions
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permissionResult.granted) {
+          Alert.alert('Permission Required', 'Photo library permission is required to select photos');
+          return;
+        }
+        
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [16, 9],
+          quality: 0.8,
+          base64: true,
+        });
+      }
+
+      if (!result.cancelled && result.assets && result.assets[0]) {
+        const asset = result.assets[0];
+        
+        // Process the image
+        let manipulatedImage;
+        if (asset.type === 'image') {
+          manipulatedImage = await ImageManipulator.manipulateAsync(
+            asset.uri,
+            [{ resize: { width: 800 } }],
+            {
+              compress: 0.8,
+              format: ImageManipulator.SaveFormat.JPEG,
+              base64: true,
+            }
+          );
+        }
+
+        // Update the vehicle with the photo/video
+        if (selectedGarageVehicle && (asset.base64 || manipulatedImage?.base64)) {
+          await updateVehiclePhoto(
+            selectedGarageVehicle.id, 
+            manipulatedImage?.base64 || asset.base64,
+            asset.type
+          );
+        }
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to process media');
+      console.error('Media picking error:', error);
+    }
+  };
+
+  const updateVehiclePhoto = async (vehicleId: string, mediaBase64: string, mediaType: string) => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${BACKEND_URL}/api/garage/${vehicleId}/photo`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          image: mediaBase64,
+          media_type: mediaType,
+        }),
+      });
+
+      if (response.ok) {
+        // Refresh garage to show updated photo
+        fetchUserGarage();
+        setShowPhotoModal(false);
+        Alert.alert('Success', 'Photo updated successfully!');
+      } else {
+        Alert.alert('Error', 'Failed to update photo');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Network error occurred');
+      console.error('Update photo error:', error);
+    }
+  };
+
+  const openPhotoModal = (vehicle: UserGarageVehicle) => {
+    setSelectedGarageVehicle(vehicle);
+    setShowPhotoModal(true);
+  };
+
   const fetchUserData = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token');
