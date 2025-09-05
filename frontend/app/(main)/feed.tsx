@@ -41,6 +41,7 @@ export default function FeedScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const fetchPosts = async () => {
     try {
@@ -197,10 +198,41 @@ export default function FeedScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.headerLeft} />
-        <TouchableOpacity>
+        <TouchableOpacity 
+          style={[styles.notificationButton, showNotifications && styles.activeNotificationButton]}
+          onPress={() => setShowNotifications(!showNotifications)}
+        >
           <Ionicons name="notifications-outline" size={24} color="#FFFFFF" />
+          {/* Notification badge */}
+          <View style={styles.notificationBadge}>
+            <Text style={styles.notificationBadgeText}>3</Text>
+          </View>
         </TouchableOpacity>
       </View>
+
+      {/* Notifications Panel */}
+      {showNotifications && (
+        <View style={styles.notificationsPanel}>
+          <View style={styles.notificationItem}>
+            <Ionicons name="heart" size={20} color="#FF4444" />
+            <Text style={styles.notificationText}>@user123 liked your post</Text>
+            <Text style={styles.notificationTime}>2m</Text>
+          </View>
+          <View style={styles.notificationItem}>
+            <Ionicons name="chatbubble" size={20} color="#FFD700" />
+            <Text style={styles.notificationText}>@speedster commented on your R1</Text>
+            <Text style={styles.notificationTime}>5m</Text>
+          </View>
+          <View style={styles.notificationItem}>
+            <Ionicons name="person-add" size={20} color="#00AA44" />
+            <Text style={styles.notificationText}>@bikerfan started following you</Text>
+            <Text style={styles.notificationTime}>1h</Text>
+          </View>
+          <TouchableOpacity style={styles.viewAllButton}>
+            <Text style={styles.viewAllText}>View All Notifications</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <FlatList
         data={posts}
@@ -339,5 +371,65 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 8,
     marginRight: 8,
+  },
+  // Notification styles
+  notificationButton: {
+    position: 'relative',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderRadius: 20,
+    padding: 8,
+  },
+  activeNotificationButton: {
+    backgroundColor: 'rgba(255, 215, 0, 0.3)',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    backgroundColor: '#FF4444',
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  notificationBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: 'bold',
+  },
+  notificationsPanel: {
+    backgroundColor: 'rgba(30, 30, 30, 0.95)',
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  notificationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#333333',
+  },
+  notificationText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#FFFFFF',
+    marginLeft: 12,
+  },
+  notificationTime: {
+    fontSize: 12,
+    color: '#666666',
+  },
+  viewAllButton: {
+    alignItems: 'center',
+    paddingVertical: 12,
+    marginTop: 8,
+  },
+  viewAllText: {
+    fontSize: 14,
+    color: '#FFD700',
+    fontWeight: '600',
   },
 });
