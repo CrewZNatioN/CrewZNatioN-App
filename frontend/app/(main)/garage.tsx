@@ -245,51 +245,97 @@ export default function GarageScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Garage Header with Tools */}
       <LinearGradient
-        colors={['#1E3A8A', '#3B82F6']}
-        style={styles.header}
+        colors={['#1A1A1A', '#2D2D2D']}
+        style={styles.garageHeader}
       >
-        <Text style={styles.headerTitle}>My Garage</Text>
-        <TouchableOpacity 
-          style={styles.addButton}
-          onPress={() => setShowAddModal(true)}
-        >
-          <Ionicons name="add" size={24} color="#1E3A8A" />
-        </TouchableOpacity>
+        <View style={styles.garageTools}>
+          <Ionicons name="build" size={24} color="#FFD700" />
+          <Text style={styles.garageTitle}>MY GARAGE</Text>
+          <TouchableOpacity 
+            style={styles.addVehicleIcon}
+            onPress={() => setShowAddModal(true)}
+          >
+            <Ionicons name="car-sport" size={24} color="#FFD700" />
+          </TouchableOpacity>
+        </View>
+        
+        {/* Garage Stats */}
+        <View style={styles.garageStats}>
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>{userVehicles.length}</Text>
+            <Text style={styles.statLabel}>VEHICLES</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>
+              {userVehicles.reduce((total, v) => total + (v.horsepower || 0), 0)}
+            </Text>
+            <Text style={styles.statLabel}>TOTAL HP</Text>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <Text style={styles.statNumber}>
+              {new Set(userVehicles.map(v => v.make)).size}
+            </Text>
+            <Text style={styles.statLabel}>BRANDS</Text>
+          </View>
+        </View>
       </LinearGradient>
 
       {userVehicles.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Ionicons name="car-sport-outline" size={80} color="#9CA3AF" />
+        <View style={styles.emptyGarage}>
+          {/* Empty Garage Illustration */}
+          <View style={styles.emptyGarageIllustration}>
+            <View style={styles.garageFloor} />
+            <View style={styles.garageDoor}>
+              <View style={styles.garageDoorHandle} />
+            </View>
+            <View style={styles.garageRoof} />
+            <Ionicons name="car-sport-outline" size={80} color="#333333" style={styles.emptyCar} />
+          </View>
+          
           <Text style={styles.emptyTitle}>Your Garage is Empty</Text>
           <Text style={styles.emptySubtitle}>
-            Start building your dream collection by adding vehicles!
+            Start building your dream collection!
           </Text>
+          
           <TouchableOpacity 
             style={styles.addFirstVehicleButton}
             onPress={() => setShowAddModal(true)}
           >
             <LinearGradient
-              colors={['#FCD34D', '#F59E0B']}
+              colors={['#FFD700', '#F59E0B']}
               style={styles.addFirstVehicleGradient}
             >
-              <Ionicons name="add" size={20} color="#1E3A8A" />
-              <Text style={styles.addFirstVehicleText}>Add Your First Vehicle</Text>
+              <Ionicons name="add-circle" size={24} color="#000000" />
+              <Text style={styles.addFirstVehicleText}>Add Your First Ride</Text>
             </LinearGradient>
           </TouchableOpacity>
         </View>
       ) : (
-        <FlatList
-          data={userVehicles}
-          renderItem={renderUserVehicle}
-          keyExtractor={(item) => item.id}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-          contentContainerStyle={styles.vehiclesList}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+        <View style={styles.garageFloorContainer}>
+          {/* Garage Floor Pattern */}
+          <View style={styles.floorPattern} />
+          
+          <FlatList
+            data={userVehicles}
+            renderItem={renderGarageVehicle}
+            keyExtractor={(item) => item.id}
+            refreshControl={
+              <RefreshControl 
+                refreshing={refreshing} 
+                onRefresh={onRefresh}
+                tintColor="#FFD700"
+              />
+            }
+            contentContainerStyle={styles.vehicleGrid}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+          />
+        </View>
+      )}      )}
 
       {/* Add Vehicle Modal */}
       <Modal
