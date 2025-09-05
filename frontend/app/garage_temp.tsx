@@ -52,6 +52,7 @@ export default function GarageScreen() {
   const [username, setUsername] = useState<string>('');
   const [showPhotoModal, setShowPhotoModal] = useState(false);
   const [selectedGarageVehicle, setSelectedGarageVehicle] = useState<UserGarageVehicle | null>(null);
+  const [photoCaption, setPhotoCaption] = useState<string>('');
 
   const pickImage = async (type: 'camera' | 'library') => {
     try {
