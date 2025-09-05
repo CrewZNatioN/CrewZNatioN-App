@@ -229,7 +229,7 @@ export default function ForumScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#121212', // Dark background
   },
   header: {
     flexDirection: 'row',
@@ -244,21 +244,21 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   newPostButton: {
-    backgroundColor: '#FCD34D',
+    backgroundColor: '#FFD700', // Gold button
     borderRadius: 20,
     padding: 8,
   },
   searchContainer: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Dark background
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: '#333333', // Dark border
   },
   searchInputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#2D2D2D', // Dark input background
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -266,49 +266,51 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#374151',
+    color: '#FFFFFF', // White text
     marginLeft: 8,
   },
   categoriesContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Dark background
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
+    borderBottomColor: '#333333', // Dark border
   },
   categoriesList: {
     paddingHorizontal: 16,
     paddingVertical: 12,
   },
   categoryButton: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#2D2D2D', // Dark button background
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 8,
     marginRight: 8,
   },
   selectedCategoryButton: {
-    backgroundColor: '#1E3A8A',
+    backgroundColor: '#FFD700', // Gold for selected
   },
   categoryButtonText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
+    color: '#CCCCCC', // Light gray text
   },
   selectedCategoryButtonText: {
-    color: '#FFFFFF',
+    color: '#000000', // Black text on gold background
   },
   postsList: {
     padding: 16,
   },
   postCard: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#1E1E1E', // Dark card background
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
-    elevation: 1,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: '#333333', // Dark border
   },
   postHeader: {
     flexDirection: 'row',
@@ -328,14 +330,14 @@ const styles = StyleSheet.create({
   postTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#FFD700', // Gold for post titles
     flex: 1,
   },
   pinnedPostTitle: {
-    color: '#F59E0B',
+    color: '#F59E0B', // Slightly different gold for pinned posts
   },
   categoryBadge: {
-    backgroundColor: '#EBF4FF',
+    backgroundColor: '#2D2D2D', // Dark badge background
     borderRadius: 12,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -343,11 +345,11 @@ const styles = StyleSheet.create({
   categoryText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#1E3A8A',
+    color: '#FFD700', // Gold text
   },
   postContent: {
     fontSize: 14,
-    color: '#6B7280',
+    color: '#CCCCCC', // Light gray for content
     lineHeight: 20,
     marginBottom: 12,
   },
@@ -363,7 +365,7 @@ const styles = StyleSheet.create({
   authorText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#374151',
+    color: '#FFFFFF', // White for author names
     marginLeft: 6,
   },
   postStats: {
@@ -377,11 +379,11 @@ const styles = StyleSheet.create({
   },
   statText: {
     fontSize: 12,
-    color: '#6B7280',
+    color: '#999999', // Gray for stats
     marginLeft: 4,
   },
   lastActivity: {
     fontSize: 12,
-    color: '#9CA3AF',
+    color: '#666666', // Darker gray for timestamps
   },
 });
