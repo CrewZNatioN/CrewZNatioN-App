@@ -28,7 +28,18 @@ export default function CameraScreen() {
   const [flashMode, setFlashMode] = useState<'off' | 'on' | 'auto'>('off');
   const [recentPhotos, setRecentPhotos] = useState<any[]>([]);
   const [selectedMode, setSelectedMode] = useState<'post' | 'story' | 'reel' | 'live'>('post');
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState<string>('none');
   const cameraRef = useRef<CameraView>(null);
+
+  const filters = [
+    { name: 'none', label: 'Original', icon: 'camera-outline' },
+    { name: 'vintage', label: 'Vintage', icon: 'film-outline' },
+    { name: 'bright', label: 'Bright', icon: 'sunny-outline' },
+    { name: 'contrast', label: 'Contrast', icon: 'contrast-outline' },
+    { name: 'sepia', label: 'Sepia', icon: 'leaf-outline' },
+    { name: 'blur', label: 'Blur', icon: 'water-outline' },
+  ];
 
   useEffect(() => {
     getCameraPermissions();
