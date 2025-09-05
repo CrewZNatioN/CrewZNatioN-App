@@ -615,7 +615,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: '#000000',
-    marginRight: 4,
+    marginRight: 6,
   },
   removeTagButton: {
     marginLeft: 4,
