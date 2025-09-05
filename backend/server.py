@@ -297,7 +297,7 @@ async def get_vehicles(make: Optional[str] = None, year: Optional[int] = None):
     if year:
         query["year"] = year
     
-    vehicles = await db.vehicles.find(query).limit(100).to_list(100)
+    vehicles = await db.vehicles.find(query, {"_id": 0}).limit(100).to_list(100)
     return vehicles
 
 @api_router.get("/vehicles/{vehicle_id}")
